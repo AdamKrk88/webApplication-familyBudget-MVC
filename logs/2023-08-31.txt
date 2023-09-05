@@ -1,0 +1,8 @@
+[31-Aug-2023 20:54:58 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('lala')
+#1 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php' on line 130
+[31-Aug-2023 21:01:25 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('lala')
+#1 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php' on line 130

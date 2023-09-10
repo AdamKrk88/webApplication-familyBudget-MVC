@@ -1,0 +1,72 @@
+[10-Sep-2023 15:48:17 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched.'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('favicon.ico')
+#1 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php' on line 130
+[10-Sep-2023 17:04:07 Europe/Berlin] Uncaught exception: 'Twig\Error\SyntaxError' with message 'Unexpected "}".'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(294): Twig\Lexer->lexExpression()
+#1 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(195): Twig\Lexer->lexBlock()
+#2 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(541): Twig\Lexer->tokenize(Object(Twig\Source))
+#3 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(594): Twig\Environment->tokenize(Object(Twig\Source))
+#4 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(408): Twig\Environment->compileSource(Object(Twig\Source))
+#5 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(381): Twig\Environment->loadClass('__TwigTemplate_...', 'Signup/signup.h...', NULL)
+#6 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(359): Twig\Environment->loadTemplate('Signup/signup.h...')
+#7 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(318): Twig\Environment->load('Signup/signup.h...')
+#8 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\View.php(51): Twig\Environment->render('Signup/signup.h...', Array)
+#9 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Controllers\Signup.php(22): Core\View::renderTemplate('Signup/signup.h...')
+#10 [internal function]: App\Controllers\Signup->newAction()
+#11 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Controller.php(48): call_user_func_array(Array, Array)
+#12 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php(121): Core\Controller->__call('new', Array)
+#13 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('signup/new')
+#14 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Views\Signup\signup.html' on line 5
+[10-Sep-2023 17:04:21 Europe/Berlin] Uncaught exception: 'Twig\Error\SyntaxError' with message 'Unexpected "}".'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(294): Twig\Lexer->lexExpression()
+#1 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(195): Twig\Lexer->lexBlock()
+#2 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(541): Twig\Lexer->tokenize(Object(Twig\Source))
+#3 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(594): Twig\Environment->tokenize(Object(Twig\Source))
+#4 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(408): Twig\Environment->compileSource(Object(Twig\Source))
+#5 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(381): Twig\Environment->loadClass('__TwigTemplate_...', 'Signup/signup.h...', NULL)
+#6 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(359): Twig\Environment->loadTemplate('Signup/signup.h...')
+#7 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(318): Twig\Environment->load('Signup/signup.h...')
+#8 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\View.php(51): Twig\Environment->render('Signup/signup.h...', Array)
+#9 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Controllers\Signup.php(22): Core\View::renderTemplate('Signup/signup.h...')
+#10 [internal function]: App\Controllers\Signup->newAction()
+#11 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Controller.php(48): call_user_func_array(Array, Array)
+#12 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php(121): Core\Controller->__call('new', Array)
+#13 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('Signup/new')
+#14 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Views\Signup\signup.html' on line 5
+[10-Sep-2023 17:05:26 Europe/Berlin] Uncaught exception: 'Twig\Error\SyntaxError' with message 'Unexpected "}".'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(294): Twig\Lexer->lexExpression()
+#1 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(195): Twig\Lexer->lexBlock()
+#2 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(541): Twig\Lexer->tokenize(Object(Twig\Source))
+#3 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(594): Twig\Environment->tokenize(Object(Twig\Source))
+#4 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(408): Twig\Environment->compileSource(Object(Twig\Source))
+#5 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(381): Twig\Environment->loadClass('__TwigTemplate_...', 'Signup/signup.h...', NULL)
+#6 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(359): Twig\Environment->loadTemplate('Signup/signup.h...')
+#7 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(318): Twig\Environment->load('Signup/signup.h...')
+#8 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\View.php(51): Twig\Environment->render('Signup/signup.h...', Array)
+#9 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Controllers\Signup.php(22): Core\View::renderTemplate('Signup/signup.h...')
+#10 [internal function]: App\Controllers\Signup->newAction()
+#11 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Controller.php(48): call_user_func_array(Array, Array)
+#12 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php(121): Core\Controller->__call('new', Array)
+#13 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('signup/new')
+#14 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Views\Signup\signup.html' on line 5
+[10-Sep-2023 17:06:34 Europe/Berlin] Uncaught exception: 'Twig\Error\SyntaxError' with message 'Unexpected "}".'
+Stack trace: #0 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(294): Twig\Lexer->lexExpression()
+#1 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Lexer.php(195): Twig\Lexer->lexBlock()
+#2 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(541): Twig\Lexer->tokenize(Object(Twig\Source))
+#3 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(594): Twig\Environment->tokenize(Object(Twig\Source))
+#4 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(408): Twig\Environment->compileSource(Object(Twig\Source))
+#5 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(381): Twig\Environment->loadClass('__TwigTemplate_...', 'Signup/signup.h...', NULL)
+#6 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(359): Twig\Environment->loadTemplate('Signup/signup.h...')
+#7 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\vendor\twig\twig\src\Environment.php(318): Twig\Environment->load('Signup/signup.h...')
+#8 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\View.php(51): Twig\Environment->render('Signup/signup.h...', Array)
+#9 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Controllers\Signup.php(22): Core\View::renderTemplate('Signup/signup.h...')
+#10 [internal function]: App\Controllers\Signup->newAction()
+#11 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Controller.php(48): call_user_func_array(Array, Array)
+#12 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\Core\Router.php(121): Core\Controller->__call('new', Array)
+#13 C:\Users\Kaczuszka\Desktop\budget-manager-MVC\public\index.php(32): Core\Router->dispatch('signup/new')
+#14 {main}
+Thrown in 'C:\Users\Kaczuszka\Desktop\budget-manager-MVC\App\Views\Signup\signup.html' on line 5

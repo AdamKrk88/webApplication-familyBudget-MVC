@@ -5,7 +5,7 @@ namespace Core;
 /**
  * View
  *
- * PHP version 7.0
+ * PHP version 7.2.0
  */
 class View
 {

@@ -104,6 +104,27 @@ class User extends \Core\Model
 
 
     /**
+     * Find a user model by user ID
+     * @param string $user_id user ID to search for
+     * 
+     * @return mixed User object if found, false otherwise
+     */
+    public static function checkIfUserIdExistInDatabase($user_id)
+    {
+        $sql = "SELECT *
+                FROM users
+                WHERE id = :id";
+        
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+        $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+
+    /**
      * Validation for name, email and password. Error array is populated with message if any error is detected
      * 
      * @return void
@@ -152,6 +173,27 @@ class User extends \Core\Model
                 $this->errors[] = 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character. Length at least 10 characters';
             }
         }
+    }
+
+    /**
+     * Authenticate a user by email and password
+     * 
+     * @param string $email email address
+     * @param string $password password
+     * 
+     * @return mixed  The user object or false if authentication fails
+     */
+    public static function authenticate($email, $password)
+    {
+        $user = static::checkIfEmailExistInDatabase($email);
+
+        if ($user) {
+            if (password_verify($password, $user->password)) {
+                return $user;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -36,13 +36,16 @@
                 <div class="col-lg-5 col-md-6 col-sm-7 bg-light-grey mx-auto p-2 mt-2">
                     <h2 class="font-color-black fw-bolder font-size-scaled-from-30px mb-1">Log in</h2>
                     {% if flash_messages is empty %}
-                    <p class="font-color-black"><span class="font-light-orange">Do not have an account?</span> Create one <a class="font-color-black link-registration-income-expense" href="registration.php">here </a></p>
+                    <p class="font-color-black"><span class="font-light-orange">Do not have an account?</span> Create one <a class="font-color-black link-registration-income-expense" href="/signup/new">here </a></p>
                     {% endif %}
-                    <form class="lh-1" method="post">
+                    <form class="lh-1" method="post" action="/login/create">
                         <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email</label>
-                        <input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" title="Please fill out this field" aria-label="Email address for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
-                        <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
-                        <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="Password input for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                        <input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" {% if flash_messages is empty %} autofocus {% endif %} value="{{ email }}" title="Please fill out this field" aria-label="Email address for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                        <div class="password-container">
+                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password-login">Password</label>
+                            <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password-login" {% if flash_messages is not empty %} autofocus {% endif %} title="Please fill out this field" aria-label="Password input for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                            <i class="icon-eye" id="show-password"></i>
+                        </div>
                         <div class="d-grid mt-5">
                             <button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Log in">Log in</button>
                         </div>
@@ -52,5 +55,12 @@
 
         </div>
     </main>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/hideShowPassword.js"></script>
 
 {% endblock %}

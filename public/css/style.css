@@ -705,6 +705,33 @@ label#labelTextNextToList
 	bottom: 0;	
 }
 
+.password-container 
+{
+	position: relative; 
+}
+
+.icon-eye
+{
+	position: absolute;
+	top: 57%;
+	right: 1%; 
+	font-size: 20px;
+	color:#8c8c8c;
+	cursor: pointer;
+
+}
+
+.icon-eye:hover
+{
+	color:#000000;
+}
+
+#password-login
+{
+	margin-right: -40px; 
+	padding-right: 40px;
+}
+
 
 @media (max-width: 1199px)
 {

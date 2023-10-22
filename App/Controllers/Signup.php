@@ -11,7 +11,7 @@ use \App\Flash;
  * 
  * PHP version 7.2.0
  */
-class Signup extends \Core\Controller
+class Signup extends OpenAccess
 {
 
      /**

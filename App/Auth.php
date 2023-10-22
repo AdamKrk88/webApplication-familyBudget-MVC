@@ -3,6 +3,7 @@
 namespace App;
 
 use \App\Models\User;
+use \App\Models\RememberedLogin;
 
 /**
  * Authentication
@@ -11,13 +12,12 @@ use \App\Models\User;
  */
 class Auth
 {
-    public static function login($user)
+    public static function login($user, $remember_me)
     {
         session_regenerate_id(true);
 
         $_SESSION['user_id'] = $user->id;
 
-       /*
         if ($remember_me) {
 
             if ($user->rememberLogin()) {
@@ -26,8 +26,6 @@ class Auth
                 
             }
         }
-
-        */
     }
 
 
@@ -39,8 +37,30 @@ class Auth
 
         } else {
 
-            return false;
+            return static::loginFromRememberCookie();
         }
     }
+
+    protected static function loginFromRememberCookie()
+    {
+        $cookie = $_COOKIE['remember_me'] ?? false;
+
+        if ($cookie) {
+
+            $remembered_login = RememberedLogin::findByToken($cookie);
+
+            //if ($remembered_login) {
+            if ($remembered_login && ! $remembered_login->hasExpired()) {
+
+                $user = $remembered_login->getUser();
+
+                static::login($user, false);
+
+                return $user;
+            }
+        }
+    }
+
+
 
 }

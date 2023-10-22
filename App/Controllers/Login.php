@@ -13,7 +13,7 @@ use \App\Auth;
  * PHP version 7.2.0
  */
 
-class Login extends \Core\Controller 
+class Login extends OpenAccess 
 {
     /**
      * Show the login page 
@@ -22,7 +22,7 @@ class Login extends \Core\Controller
      */
     public function newAction()
     {
-        View::renderTemplate('Login/login.html');
+         View::renderTemplate('Login/login.html'); 
     }
 
     public function blockAccessAction()
@@ -34,11 +34,11 @@ class Login extends \Core\Controller
     {
         $user = User::authenticate($_POST['email'], $_POST['password']);
         
-    //    $remember_me = isset($_POST['remember_me']);
+        $remember_me = isset($_POST['remember-me']);
 
         if ($user) {
 
-            Auth::login($user);
+            Auth::login($user, $remember_me);
 
      //       Flash::addMessage('Login successful');
 
@@ -49,7 +49,8 @@ class Login extends \Core\Controller
             Flash::addMessage('Login data incorrect. Please try again', Flash::ORANGE);
 
             View::renderTemplate('Login/login.html', [
-                'email' => $_POST['email']
+                'email' => $_POST['email'],
+                'remember_me' => $remember_me
                 
             ]);
         }

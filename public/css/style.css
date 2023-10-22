@@ -732,6 +732,38 @@ label#labelTextNextToList
 	padding-right: 40px;
 }
 
+.form-check-input
+{
+	width: 1.4em;
+	height: 1.4em;
+	margin-top: 0;
+	outline: none; 
+	border: 1px solid #8c8c8c;
+
+}
+
+.form-check-input:focus 
+{
+	border: 2px solid #8c8c8c;
+	box-shadow: none;
+}
+
+.form-check-input[type=checkbox]
+{
+	border-radius: 0.3em;
+}
+
+.form-check-label
+{
+	line-height: 1.4em;
+}
+
+.form-check-input[type='checkbox']:checked 
+{
+	background-color: #8c8c8c;
+	border-color: #8c8c8c;
+}
+
 
 @media (max-width: 1199px)
 {

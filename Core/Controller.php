@@ -86,7 +86,7 @@ abstract class Controller
         exit;
     }
 
-    public function requireLogin()
+    protected function requireLogin()
     {
         if (! Auth::getUser()) {
 
@@ -95,6 +95,13 @@ abstract class Controller
      //       Auth::rememberRequestedPage();
 
             $this->redirect('/login/blockAccess');
+        }
+    }
+
+    protected function openAccessForLoggedUser()
+    {
+        if (Auth::getUser()) {
+            $this->redirect('/menu/display');
         }
     }
 }

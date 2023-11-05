@@ -42,18 +42,20 @@
                         <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email</label>
                         <input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" {% if flash_messages is empty %} autofocus {% endif %} value="{{ email }}" title="Please fill out this field" aria-label="Email address for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
                         <div class="password-container">
-                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password-login">Password</label>
-                            <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password-login" {% if flash_messages is not empty %} autofocus {% endif %} title="Please fill out this field" aria-label="Password input for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
+                            <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" {% if flash_messages is not empty %} autofocus {% endif %} title="Please fill out this field" aria-label="Password input for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
                             <i class="icon-eye" id="show-password"></i>
                         </div>
 
                         <div class="form-check ps-0">
                         
-                        <label class="form-check-label font-color-grey font-size-scaled-from-15px" for="remember-me">
+                        <label class="form-check-label font-color-black font-size-scaled-from-15px" for="remember-me">
                             <input class="form-check-input ms-0 me-2" type="checkbox" name="remember-me" id="remember-me" value="" aria-label="Remember user logged in" {% if remember_me %} checked {% endif %}/>Remember me</label>
                         </div>
 
-                        <div class="d-grid mt-5">
+                        <p class="font-color-black font-size-scaled-from-15px mb-0 mt-3"><span class="font-light-orange">Forgot your password?</span> Click <a class="font-color-black link-registration-income-expense" href="/password/forgot">here </a>to reset it</p>
+
+                        <div class="d-grid mt-4">
                             <button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Log in">Log in</button>
                         </div>
                     </form>

@@ -27,11 +27,16 @@
 					<div class="underline"></div>   
 					<form class="lh-1" action="/signup/create" method="post">		
 						<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="name">Name</label>
-						<input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="name" id="name" title="Please fill out this field" aria-label="Name input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
+						<input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="username" id="name" title="Please fill out this field" aria-label="Name input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
 						<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email address</label>
 						<input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" title="Please fill out this field" aria-label="Email address input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
-						<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
-						<input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="Password input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />			
+						
+						<div class="password-container">
+                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
+                            <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="Password to be created for user account" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                            <i class="icon-eye" id="show-password"></i>
+                        </div>
+
 						<div class="d-grid mt-5">
 							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Register button">Register</button>
 						</div>			
@@ -43,5 +48,10 @@
 	
 {% endblock %}
 
-	
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/hideShowPassword.js"></script>
+
+{% endblock %}	
 

@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+        .no-margin 
+        {
+            margin: 0;
+        }
+
+        .no-top-margin 
+        {
+            margin-top: 0;
+        }
+
+        .no-bottom-margin 
+        {
+            margin-bottom: 0;
+        }
+        </style>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+            <td>
+                <p>Dear User</p>
+                <p class="no-margin">Please click the following link to reset your password to Budget Manager application:</p>
+                <p class="no-margin"><a href="{{ url }}">Reset Link</a></p>
+                <p class="no-bottom-margin">Best regards,</p>
+                <p class="no-top-margin">BM application</p>
+            </td>
+            </tr>
+            <tr>
+                <td>*This email is sent automatically on your demand. Please do not reply to it</td>
+            </tr>
+        </table>
+    </body>
+</html>

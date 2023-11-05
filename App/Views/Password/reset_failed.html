@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}User registration failed{% endblock %}
+{% block title %}Password reset failed{% endblock %}
 
 {% block header %}
 
@@ -22,25 +22,23 @@
 						<article>		
 							<header> 
 								<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey p-2">	
-									<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0">Register<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/login/new">Back to Login</a></h2>
+									<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0">Password reset<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/login/new">Back to Login</a></h2>
 								</div>
 							</header>
 							<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey px-2 pb-2">	
 								<div class="underline"></div>   
-								<form class="lh-1" action="/signup/create" method="post">		
-									<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="name">Name</label>
-									<input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="username" id="name" title="Please fill out this field" aria-label="Name input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
-									<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email address</label>
-									<input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" title="Please fill out this field" aria-label="Email address input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
-									
+								<form class="lh-1" action="/password/resetPassword" method="post">		
+										
+                                    <input type="hidden" name="token" value="{{ token }}" />
+
 									<div class="password-container">
 										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
-										<input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="Password to be created for user account" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+										<input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="New password to be created" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
 										<i class="icon-eye" id="show-password"></i>
 									</div>									
 									
 									<div class="d-grid mt-5">
-										<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Register button">Register</button>
+										<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Password reset button">Change password</button>
 									</div>			
 								</form>
 							</div>

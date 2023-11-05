@@ -1,5 +1,5 @@
 const showPassword = $('#show-password');
-const passwordField = $('#password-login');
+const passwordField = $('#password');
 
 showPassword.click(function() {
     this.classList.toggle('icon-eye-off');

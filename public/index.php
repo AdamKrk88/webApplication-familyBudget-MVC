@@ -33,7 +33,10 @@ $router = new Core\Router();
 
 // Add the routes
 $router->add('', ['controller' => 'Login', 'action' => 'new']);
+$router->add('login', ['controller' => 'Login', 'action' => 'new']);
+$router->add('logout', ['controller' => 'Logout', 'action' => 'destroy']);
 $router->add('{controller}/{action}');
 $router->add('password/reset/{token:[\da-f]+}', ['controller' => 'Password', 'action' => 'reset']);
+$router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'action' => 'activate']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);

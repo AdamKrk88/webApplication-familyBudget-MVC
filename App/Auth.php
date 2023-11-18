@@ -61,6 +61,58 @@ class Auth
         }
     }
 
+    /**
+     * Logout the user
+     *
+     * @return void
+     */
+    public static function logout()
+    {
+        // Unset all of the session variables
+        $_SESSION = [];
+
+        // Delete the session cookie
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params['path'],
+                $params['domain'],
+                $params['secure'],
+                $params['httponly']
+            );
+        }
+
+        // Finally destroy the session
+        session_destroy();
+
+        static::forgetLogin();
+    }
+
+    /**
+     * Forget the remembered login, if present
+     *
+     * @return void
+     */
+    protected static function forgetLogin()
+    {
+        $cookie = $_COOKIE['remember_me'] ?? false;
+
+        if ($cookie) {
+
+            $remembered_login = RememberedLogin::findByToken($cookie);
+
+            if ($remembered_login) {
+
+                $remembered_login->delete();
+            }
+
+            setcookie('remember_me', '', time() - 3600);  // set to expire in the past
+        }
+    }
 
 
 }

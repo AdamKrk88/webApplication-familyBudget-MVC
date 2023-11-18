@@ -33,9 +33,9 @@ class Signup extends OpenAccess
 
         if ($user->save()) {
 
-         //   $user->sendActivationEmail();
-            Flash::addMessage('Your registration is successful. You can log in', Flash::ORANGE);
-            $this->redirect('/login/new');
+            $user->sendActivationEmail();
+       //     Flash::addMessage('Your registration is successful. You can log in', Flash::ORANGE);
+            $this->redirect('/signup/success');
 
         } else {
 
@@ -45,5 +45,41 @@ class Signup extends OpenAccess
 
         }
         
+    }
+
+    /**
+     * Show the signup success page
+     *
+     * @return void
+     */
+    public function successAction()
+    {
+        View::renderTemplate('Signup/success_before_activation.html');
+    }
+
+    /**
+     * Activate a new account
+     *
+     * @return void
+     */
+    public function activateAction()
+    {   
+        $token = $this->route_params['token'];
+        User::activateAccount($token);    
+       
+        if (User::returnAccountStatus($token)) 
+        {
+            Flash::addMessage('Account activated. You can log into the application', Flash::ORANGE);
+        }
+        else 
+        {
+            Flash::addMessage('Try to log in. If it failed, please go to registration page', Flash::ORANGE);
+        }
+
+        User::clearActivationToken($token);
+        
+        View::renderTemplate('Login/login.html');  
+            
+        //$this->redirect('/signup/activated');
     }
 }

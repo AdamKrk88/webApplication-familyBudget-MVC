@@ -3,3 +3,7 @@ vendor
 composer.lock
 
 App/Config.php
+
+LICENSE
+
+README.md

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block header %}
+
+	<header class="d-flex navbar-light-yellow">	
+		<div class="header-login">
+			<img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span>
+		</div>
+	</header>
+
+{% endblock %}
+
+{% block body %}
+
+    <main class="content-wrapper">
+        <div class="row initialHeightForContent align-items-center">
+            <article>		
+                <header>     
+                    <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1 mt-4-dot-5">
+                        <h1 class="fw-bolder font-color-black font-size-scaled-from-45px text-center">Welcome to Budget Manager</h1>
+                        
+                        {% if flash_messages is not empty %}
+                        
+                            {% for message in flash_messages %}
+                                <p class="text-center {{ message.type }}">{{ message.body }}</p> 
+                            {% endfor %}
+                        
+                        {% else %}
+                            <p class="text-center font-color-grey">Please fill the form below to log in. If you don't have account in our service, you can create it by clicking below and follow instruction on registration side</p> 
+                        {% endif %}
+                       
+                    </div>
+                </header> 
+                <div class="col-lg-5 col-md-6 col-sm-7 bg-light-grey mx-auto p-2 mt-2">
+                    <h2 class="font-color-black fw-bolder font-size-scaled-from-30px mb-1">Log in</h2>
+            
+                    <p class="font-color-black"><span class="font-light-orange">Do not have an account?</span> Create one <a class="font-color-black link-registration-income-expense" href="/signup/new">here </a></p>
+                
+                    <form class="lh-1" method="post" action="/login/create">
+                        <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email</label>
+                        <input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" {% if email is empty %} autofocus {% endif %} value="{{ email }}" title="Please fill out this field" aria-label="Email address for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                        <div class="password-container">
+                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
+                            <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" {% if email is not empty %} autofocus {% endif %} title="Please fill out this field" aria-label="Password input for login" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                            <i class="icon-eye" id="show-password"></i>
+                        </div>
+
+                        <div class="form-check ps-0">
+                        
+                        <label class="form-check-label font-color-black font-size-scaled-from-15px" for="remember-me">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" name="remember-me" id="remember-me" value="" aria-label="Remember user logged in" {% if remember_me %} checked {% endif %}/>Remember me</label>
+                        </div>
+
+                        <p class="font-color-black font-size-scaled-from-15px mb-0 mt-3"><span class="font-light-orange">Forgot your password?</span> Click <a class="font-color-black link-registration-income-expense" href="/password/forgot">here </a>to reset it</p>
+
+                        <div class="d-grid mt-4">
+                            <button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Log in">Log in</button>
+                        </div>
+                    </form>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/hideShowPassword.js"></script>
+
+{% endblock %}

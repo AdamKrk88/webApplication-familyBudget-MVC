@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Password reset{% endblock %}
+
+{% block header %}
+
+	<header class="d-flex navbar-light-yellow">	
+		<div class="header-login">
+			<img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span>
+		</div>
+	</header>
+
+{% endblock %}
+
+
+{% block body %}
+
+	<main class="content-wrapper">
+		<div class="row initialHeightForContent align-items-center">
+			<article>		
+				<header>
+					<div class="col-lg-5 col-md-6 col-sm-7 bg-light-grey p-2 mx-auto">	
+						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Password reset<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/">Back to Login</a></h2>
+					</div>
+				</header>
+				<div class="col-lg-5 col-md-6 col-sm-7 bg-light-grey px-2 pb-2 mx-auto">	
+					<div class="underline"></div>   
+					<form class="lh-1" action="/password/resetPassword" method="post">
+
+						<input type="hidden" name="token" value="{{ token }}" />
+                        
+                        <div class="password-container">
+                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
+                            <input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="New password to be created" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                            <i class="icon-eye" id="show-password"></i>
+                        </div>	
+                    
+                        <div class="d-grid mt-4">
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Password reset button">Change password</button>
+						</div>			
+					</form>
+				</div>	
+			</article>
+		</div>
+	</main>
+	
+{% endblock %}
+
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/hideShowPassword.js"></script>
+
+{% endblock %}	

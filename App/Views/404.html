@@ -1,10 +1,26 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title %}Page not found{% endblock %}
 
+{% block header %}
+
+    <header class="d-flex navbar-light-yellow">	
+        <div class="header-login">
+            <img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span>
+        </div>
+    </header>
+
+{% endblock %}
+
 {% block body %}
 
-    <h1>Page not found</h1>
-    <p>Sorry, that page doesn't exist.</p>
+	<main class="h-100">
+		<article class="web-content d-flex align-items-center justify-content-center">
+			<div class="text-center">
+				<h1 class="fst-italic lh-lg font-size-scaled-from-45px fw-bolder font-color-black">Page not found</h1> 
+				<p class="fst-italic lh-lg font-size-scaled-from-45px fw-bolder font-color-black">Sorry, that page doesn't exist</p>
+			</div>
+		</article>
+	</main>
 
 {% endblock %}

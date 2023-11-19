@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Password reset failed{% endblock %}
+
+{% block header %}
+
+	<header class="d-flex navbar-light-yellow">	
+		<div class="header-login">
+			<img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span>
+		</div>
+	</header>
+
+{% endblock %}
+
+{% block body %}
+
+	<div class="content-wrapper">
+		<div class="row initialHeightForContent align-items-center">
+			<div class="col-sm-6">
+				<div class="row">
+					<main>
+						<article>		
+							<header> 
+								<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey p-2">	
+									<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0">Password reset<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/">Back to Login</a></h2>
+								</div>
+							</header>
+							<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey px-2 pb-2">	
+								<div class="underline"></div>   
+								<form class="lh-1" action="/password/resetPassword" method="post">		
+										
+                                    <input type="hidden" name="token" value="{{ token }}" />
+
+									<div class="password-container">
+										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
+										<input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="New password to be created" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+										<i class="icon-eye" id="show-password"></i>
+									</div>									
+									
+									<div class="d-grid mt-5">
+										<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Password reset button">Change password</button>
+									</div>			
+								</form>
+							</div>
+						</article>
+					</main>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<section>
+						<header>
+							<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey p-2">	
+								<h2 class="font-color-black fw-bolder font-size-scaled-from-30px m-0">Error</h2>
+							</div>
+						</header>
+						<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey px-2 pb-2">	
+							<div class="underline"></div> 
+							<ul class="list-group list-group-flush font-size-scaled-from-15px">
+                                {% for error in user.errors %}
+								    <li class="list-group-item bg-light-grey px-0 py-1">{{ error }}</li>
+                                {% endfor %}
+							</ul>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/hideShowPassword.js"></script>
+
+{% endblock %}	

@@ -2,10 +2,12 @@
 
 namespace Core;
 
+use \App\Auth;
+
 /**
  * Base controller
  *
- * PHP version 7.0
+ * PHP version 7.2.0
  */
 abstract class Controller
 {
@@ -69,5 +71,37 @@ abstract class Controller
      */
     protected function after()
     {
+    }
+
+    /**
+     * Redirect to a different page
+     *
+     * @param string $url  The relative URL
+     *
+     * @return void
+     */
+    public function redirect($url)
+    {
+        header('Location: http://' . $_SERVER['HTTP_HOST'] . $url, true, 303);
+        exit;
+    }
+
+    protected function requireLogin()
+    {
+        if (! Auth::getUser()) {
+
+       //     Flash::addMessage('Please login to access that page', Flash::INFO);
+
+     //       Auth::rememberRequestedPage();
+
+            $this->redirect('/login/blockAccess');
+        }
+    }
+
+    protected function openAccessForLoggedUser()
+    {
+        if (Auth::getUser()) {
+            $this->redirect('/menu/display');
+        }
     }
 }

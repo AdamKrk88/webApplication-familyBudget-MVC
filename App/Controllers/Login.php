@@ -22,7 +22,6 @@ class Login extends OpenAccess
      */
     public function newAction()
     {
-      //  \App\Mail::send();
         View::renderTemplate('Login/login.html');  
     }
 

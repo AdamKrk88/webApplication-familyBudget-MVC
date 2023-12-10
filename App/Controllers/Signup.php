@@ -65,11 +65,14 @@ class Signup extends OpenAccess
     public function activateAction()
     {   
         $token = $this->route_params['token'];
-        User::activateAccount($token);    
+        User::activateAccount($token); 
+        $user = User::returnAccountStatus($token);   
        
-        if (User::returnAccountStatus($token)) 
+        if ($user) 
         {
             Flash::addMessage('Account activated. You can log into the application', Flash::ORANGE);
+            $user->assignDefaultCategories(); 
+
         }
         else 
         {

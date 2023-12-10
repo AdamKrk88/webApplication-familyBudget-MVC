@@ -416,6 +416,7 @@ class User extends \Core\Model
 
         if ($sqlType == "Select")
         {
+            $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
             return $stmt->fetch();
         }
     }
@@ -432,7 +433,7 @@ class User extends \Core\Model
 
     public static function returnAccountStatus($value)
     {
-        $sql = 'SELECT is_active FROM users
+        $sql = 'SELECT id, is_active FROM users
                 WHERE activation_hash = :hashed_token';
     
         return static::connectDatabaseWithActivationToken($sql, $value);
@@ -445,6 +446,64 @@ class User extends \Core\Model
                 WHERE activation_hash = :hashed_token';
     
         static::connectDatabaseWithActivationToken($sql, $value, "Update");
+    }
+
+    public function returnDefaultCategoriesForIncome() 
+    {
+        $sql = 'SELECT *
+                FROM incomes_category_default';
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function assignDefaultCategories() 
+    {
+        $defaultCategories = $this->returnDefaultCategoriesForIncome();
+        
+        $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)
+                VALUES 
+                (:user_id, :category_name0),
+                (:user_id, :category_name1),
+                (:user_id, :category_name2),
+                (:user_id, :category_name3)';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);    
+        
+        for ($categoryCounter = 0; $categoryCounter < count($defaultCategories); $categoryCounter++) 
+        {
+            $categoryName = ':category_name' . $categoryCounter;
+            $stmt->bindValue($categoryName, $defaultCategories[$categoryCounter]['name'], PDO::PARAM_STR);   
+        }
+                                  
+        return $stmt->execute();
+    }
+
+    public static function returnCategoriesForIncome($userId) 
+    {
+        $sql = 'SELECT *
+                FROM incomes_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);  
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+      /* 
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        */
     }
 
 }

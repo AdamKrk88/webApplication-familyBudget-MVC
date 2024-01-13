@@ -22,13 +22,12 @@ class Login extends OpenAccess
      */
     public function newAction()
     {
-      //  \App\Mail::send();
         View::renderTemplate('Login/login.html');  
     }
 
     public function blockAccessAction()
     {
-        View::renderTemplate('no_authorization.html');
+        View::renderTemplate('Login/no_authorization.html');
     }
 
     public function createAction()

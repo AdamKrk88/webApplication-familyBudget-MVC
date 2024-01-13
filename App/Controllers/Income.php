@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use \App\Models\User;
-//use \Core\View;
+use \Core\View;
 
 /**
  * Income controller
@@ -16,6 +16,13 @@ class Income extends Authenticated
     public function displayIncomeFormAction()
     {
         $categories = User::returnCategoriesForIncome($_SESSION['user_id']);
-        View::renderTemplate('Income/income_form.html');
+        View::renderTemplate('Income/income_form.html', [
+            'categories' => $categories
+        ]);
+    }
+
+    public function processAjax() 
+    {
+
     }
 }

@@ -14,7 +14,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="mainmenu">
 				<ul class="navbar-nav ms-auto">
-					<li class="nav-item text-center"><a class="nav-link" href="">Add income</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/income/displayIncomeForm">Add income</a></li>
 					<li class="nav-item text-center"><a class="nav-link" href="">Add expense</a></li>
 					<li class="nav-item text-center"><a class="nav-link" href="">Review balance</a></li>
 					<li class="nav-item text-center"><a class="nav-link" href="">Settings</a></li>
@@ -57,16 +57,16 @@
                         <div class="underline"></div>
                         <form class="lh-1 d-flex flex-column pt-2" action="" method="post" id="secondForm">
                             <div class="text-center">
-                                <?php if(!empty($categories)): ?>
+                                {% if categories is not empty %}
                                 <label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1 me-2" for="categoryOptions">Category</label>  
                                 <select class="form-select form-select-sm w-auto d-inline-block fw-bold font-color-grey text-center" id="categoryOptions" name="category" aria-label="Category options for income">	
-                                    <?php foreach ($categories as $category): ?>																				
-                                    <option value="<?= $category['category']; ?>"><?= $category['category']; ?></option>
-                                    <?php endforeach; ?>										
+                                    {% for category in categories %}																				
+                                    <option value= {{ category.name }}>{{ category.name }}</option>
+                                    {% endfor %}										
                                 </select>
-                                <?php else: ?>
+                                {% else %}
                                 <p class="font-orange mb-0" id="no-categories">No categories available</p>
-                                <?php endif; ?>
+                                {% endif %}
                             </div>
                             <div class="d-inline-flex p-2 align-items-center">
                                 <label class="font-color-grey font-size-scaled-from-15px fw-bolder me-2 " for="comment">Comment (optional)</label>
@@ -79,7 +79,7 @@
                         <div class="d-flex flex-column">
                             <div class="btn-customized-group px-2" role="group">
                                 <button class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2 me-1" id="buttonToSubmitForm" type="submit" aria-label="Add income">Add</button>
-                                <a class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2 ms-1" href="menu.php">Cancel</a>
+                                <a class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2 ms-1" href="/menu/display">Cancel</a>
                             </div>
                         </div>								
                     </div>

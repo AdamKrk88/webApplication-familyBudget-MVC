@@ -22,6 +22,10 @@ class Login extends OpenAccess
      */
     public function newAction()
     {
+     /*   $user = new User();
+        $user -> id = 3;
+        $user -> assignDefaultCategoriesForExpense(); */
+      //  var_dump(User::returnCategoriesForExpense(3));
         View::renderTemplate('Login/login.html');  
     }
 

@@ -43,7 +43,7 @@
 								</header>
 							</div>
 							<div class="col-md-6">
-								<form class="lh-1 d-flex" action="" method="post" id="firstForm">
+								<form class="lh-1 d-flex" id="firstForm">
 									<div class="w-50 px-2">
 										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="amount">Amount</label>
 										<input class="form-control form-control-sm fw-bold font-color-grey text-center ps-4" type="number" name="amount" id="amount" step="0.01" title="Please fill out this field" aria-label="Expense expressed in the number as your cost" />		
@@ -55,7 +55,7 @@
 										<label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="paymentOptions">Payment</label>  
 										<select class="form-select form-select-sm fw-bold font-color-grey" id="paymentOptions" name="payment" aria-label="Payment options">
 											{% for payment in payments %}
-											<option value={{ payment.name }}>{{ payment.name }}</option>
+											<option value={{ payment.name | json_encode | raw }}>{{ payment.name }}</option>
 											{% endfor %}
 										</select>
 										{% else %}
@@ -73,7 +73,7 @@
 										<label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1 me-2" for="categoryOptions">Category</label>  
 										<select class="form-select form-select-sm w-auto d-inline-block fw-bold font-color-grey text-center" id="categoryOptions" name="category" aria-label="Category options">
 											{% for category in categories %}																				
-											<option value= {{ category.name }}>{{ category.name }}</option>
+											<option value= {{ category.name | json_encode | raw }}>{{ category.name }}</option>
 											{% endfor %}										
 										</select>
 										{% else %}

@@ -15,7 +15,7 @@ $(document).ready(function() {
    
 
     //restriction for amount and date fields
-  //  amountInput.attr('min','0.01');
+    amountInput.attr('min','0.01');
     dateInput.attr('min','2023-01-01');
     dateInput.attr('max', maxDate);
     
@@ -42,6 +42,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
+    //restriction for amount input provided as manual, so from keyboard
     amountInput.on('keypress', function (event) {
         var regexInputBeginning = new RegExp("[e\+\-\.]","i");
         var regexNext = new RegExp("[e\+\-]","i");
@@ -59,7 +60,7 @@ $(document).ready(function() {
     });
 
 
-
+    //keep two decimal places
     amountInput.change(function () {
       //   alert(this.val().match(/^\d+\.?\d?\d?/g));
         var result = parseFloat($(this).val()).toFixed(2);

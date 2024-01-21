@@ -61,7 +61,7 @@
                                 <label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1 me-2" for="categoryOptions">Category</label>  
                                 <select class="form-select form-select-sm w-auto d-inline-block fw-bold font-color-grey text-center" id="categoryOptions" name="category" aria-label="Category options for income">	
                                     {% for category in categories %}																				
-                                    <option value= {{ category.name }}>{{ category.name }}</option>
+                                    <option value= {{ category.name | json_encode | raw }}>{{ category.name }}</option>
                                     {% endfor %}										
                                 </select>
                                 {% else %}

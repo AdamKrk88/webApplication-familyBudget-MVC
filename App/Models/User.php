@@ -459,29 +459,138 @@ class User extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function assignDefaultCategories() 
+    public function returnDefaultCategoriesForExpense() 
     {
-        $defaultCategories = $this->returnDefaultCategoriesForIncome();
-        
-        $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)
-                VALUES 
-                (:user_id, :category_name0),
-                (:user_id, :category_name1),
-                (:user_id, :category_name2),
-                (:user_id, :category_name3)';
+        $sql = 'SELECT *
+                FROM expenses_category_default';
 
         $dbConnection = static::getDB();
-        $stmt = $dbConnection->prepare($sql);
+        $stmt =  $dbConnection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);    
+    public function returnDefaultPaymentMethods() 
+    {
+        $sql = 'SELECT *
+                FROM payment_methods_default';
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function assignDefaultCategoriesForIncome() 
+    {
+        $defaultCategories = $this->returnDefaultCategoriesForIncome();
+        $valuesSqlQuery ='';
+
+        if (count($defaultCategories) > 0) {
         
-        for ($categoryCounter = 0; $categoryCounter < count($defaultCategories); $categoryCounter++) 
-        {
-            $categoryName = ':category_name' . $categoryCounter;
-            $stmt->bindValue($categoryName, $defaultCategories[$categoryCounter]['name'], PDO::PARAM_STR);   
+            for ($categoryCounter = count($defaultCategories) - 1; $categoryCounter >= 0 ; $categoryCounter--) 
+            {
+                $valuesSqlQuery = '(:user_id, :category_name' . $categoryCounter . '),' . $valuesSqlQuery;     
+            }
+
+            $valuesSqlQuery = rtrim($valuesSqlQuery,',');
+        
+            
+            $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)
+                    VALUES' . ' ' . $valuesSqlQuery; 
+
+            $dbConnection = static::getDB();
+            $stmt = $dbConnection->prepare($sql);
+
+            $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);    
+            
+            for ($categoryCounter = 0; $categoryCounter < count($defaultCategories); $categoryCounter++) 
+            {
+                $categoryName = ':category_name' . $categoryCounter;
+                $stmt->bindValue($categoryName, $defaultCategories[$categoryCounter]['name'], PDO::PARAM_STR);   
+            }
+                                    
+            return $stmt->execute();
+
         }
-                                  
-        return $stmt->execute();
+        else {
+            return false;
+        }
+    }
+
+    public function assignDefaultCategoriesForExpense() 
+    {
+        $defaultCategories = $this->returnDefaultCategoriesForExpense();
+        $valuesSqlQuery ='';
+
+        if (count($defaultCategories) > 0) {
+        
+            for ($categoryCounter = count($defaultCategories) - 1; $categoryCounter >= 0 ; $categoryCounter--) 
+            {
+                $valuesSqlQuery = '(:user_id, :category_name' . $categoryCounter . '),' . $valuesSqlQuery;     
+            }
+
+            $valuesSqlQuery = rtrim($valuesSqlQuery,',');
+        
+            
+            $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name)
+                    VALUES' . ' ' . $valuesSqlQuery; 
+
+            $dbConnection = static::getDB();
+            $stmt = $dbConnection->prepare($sql);
+
+            $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);    
+            
+            for ($categoryCounter = 0; $categoryCounter < count($defaultCategories); $categoryCounter++) 
+            {
+                $categoryName = ':category_name' . $categoryCounter;
+                $stmt->bindValue($categoryName, $defaultCategories[$categoryCounter]['name'], PDO::PARAM_STR);   
+            }
+                                    
+            return $stmt->execute();
+
+        }
+        else {
+            return false;
+        }
+        
+    }
+
+    public function assignDefaultPaymentMethods() 
+    {
+        $defaultPaymentMethods = $this->returnDefaultPaymentMethods();
+        $valuesSqlQuery ='';
+
+        if (count($defaultPaymentMethods) > 0) {
+        
+            for ($paymentCounter = count($defaultPaymentMethods) - 1; $paymentCounter >= 0 ; $paymentCounter--) 
+            {
+                $valuesSqlQuery = '(:user_id, :payment_name' . $paymentCounter . '),' . $valuesSqlQuery;     
+            }
+
+            $valuesSqlQuery = rtrim($valuesSqlQuery,',');
+        
+            
+            $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name)
+                    VALUES' . ' ' . $valuesSqlQuery; 
+
+            $dbConnection = static::getDB();
+            $stmt = $dbConnection->prepare($sql);
+
+            $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);    
+            
+            for ($paymentCounter = 0; $paymentCounter < count($defaultPaymentMethods); $paymentCounter++) 
+            {
+                $paymentName = ':payment_name' . $paymentCounter;
+                $stmt->bindValue($paymentName, $defaultPaymentMethods[$paymentCounter]['name'], PDO::PARAM_STR);   
+            }
+                                    
+            return $stmt->execute();
+
+        }
+        else {
+            return false;
+        }
     }
 
     public static function returnCategoriesForIncome($userId) 
@@ -504,6 +613,40 @@ class User extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         */
+    }
+
+    public static function returnCategoriesForExpense($userId) 
+    {
+        $sql = 'SELECT *
+                FROM expenses_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);  
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+    }
+
+    public static function returnPaymentMethods($userId) 
+    {
+        $sql = 'SELECT *
+                FROM payment_methods_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);  
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
     }
 
 }

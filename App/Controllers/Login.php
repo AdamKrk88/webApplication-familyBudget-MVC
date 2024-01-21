@@ -22,6 +22,7 @@ class Login extends OpenAccess
      */
     public function newAction()
     {
+
         View::renderTemplate('Login/login.html');  
     }
 

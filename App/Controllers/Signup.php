@@ -71,7 +71,9 @@ class Signup extends OpenAccess
         if ($user) 
         {
             Flash::addMessage('Account activated. You can log into the application', Flash::ORANGE);
-            $user->assignDefaultCategories(); 
+            $user->assignDefaultCategoriesForIncome(); 
+            $user->assignDefaultCategoriesForExpense();
+            $user->assignDefaultPaymentMethods();
 
         }
         else 

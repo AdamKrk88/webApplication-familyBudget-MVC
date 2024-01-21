@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Add expense{% endblock %}
+
+{% block header %}
+
+	<header>	
+		<nav class="navbar navbar-expand-lg navbar-light-yellow">
+			<a class="navbar-brand" id="logoForPage" href="/menu/display"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle">Budget Manager</span></a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Button to open main menu options">
+				<span class="navbar-toggler-icon">
+					<i class="icon-menu"></i>
+				</span>
+			</button>
+			<div class="collapse navbar-collapse" id="mainmenu">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item text-center"><a class="nav-link" href="/income/displayIncomeForm">Add income</a></li>
+					<li class="nav-item text-center"><a class="nav-link active" href="/expense/displayExpenseForm" aria-current="page">Add expense</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="">Review balance</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="">Settings</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
+				</ul>
+			</div>
+		</nav>		
+ 	</header>
+
+{% endblock %}
+
+{% block body %}
+	
+	<main class="content-wrapper">
+		<div class="row">
+			<article>
+				<div class ="row g-0 initialHeightForContent align-items-center justify-content-center">
+					<div class="col-lg-8  col-md-10 col-sm-12 bg-light-grey position-relative">
+						<div class="row">
+							<div class="col-12 position-absolute top-0 start-50 p-0 text-center translate-middle" id="expenseRegisterConfirmation">
+								<p class="font-color-grey mb-5"></p>
+							</div>
+							<div class="col-md-6 align-self-center pt-1 pt-md-0">
+								<header>
+									<h2 class="font-color-black fw-bolder font-size-scaled-from-30px me-0 my-0 ms-4 text-md-start text-center">Add expense</h2>
+								</header>
+							</div>
+							<div class="col-md-6">
+								<form class="lh-1 d-flex" id="firstForm">
+									<div class="w-50 px-2">
+										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="amount">Amount</label>
+										<input class="form-control form-control-sm fw-bold font-color-grey text-center ps-4" type="number" name="amount" id="amount" step="0.01" title="Please fill out this field" aria-label="Expense expressed in the number as your cost" />		
+										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="date">Date</label>
+										<input class="form-control form-control-sm fw-bold font-color-grey text-center" type="date" name="date" id="date" title="Please fill out this field" aria-label="Date of your expense registration" />
+									</div>
+									<div class="w-50 px-2">
+										{% if payments is not empty %}
+										<label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="paymentOptions">Payment</label>  
+										<select class="form-select form-select-sm fw-bold font-color-grey" id="paymentOptions" name="payment" aria-label="Payment options">
+											{% for payment in payments %}
+											<option value={{ payment.name | json_encode | raw }}>{{ payment.name }}</option>
+											{% endfor %}
+										</select>
+										{% else %}
+										<p class="h-100 py-5 mt-3 text-center font-orange mb-0" id="no-payment-option">No payment option</p>
+										{% endif %}
+									</div>
+								</form>   
+							</div>
+
+							<div class="col-sm-12 py-2" style="font-size: 1rem;">
+								<div class="underline"></div>
+								<form class="lh-1 d-flex flex-column pt-2" action="" method="post" id="secondForm">
+									<div class="text-center">
+										{% if categories is not empty %}
+										<label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1 me-2" for="categoryOptions">Category</label>  
+										<select class="form-select form-select-sm w-auto d-inline-block fw-bold font-color-grey text-center" id="categoryOptions" name="category" aria-label="Category options">
+											{% for category in categories %}																				
+											<option value= {{ category.name | json_encode | raw }}>{{ category.name }}</option>
+											{% endfor %}										
+										</select>
+										{% else %}
+										<p class="font-orange mb-0" id="no-categories">No categories available</p>
+										{% endif %}
+									</div>
+									<div class="d-inline-flex p-2 align-items-center">
+										<label class="font-color-grey font-size-scaled-from-15px fw-bolder me-2 " for="comment">Comment (optional)</label>
+										<div class="flex-fill">
+											<input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="comment" id="comment" title="Optional comment" aria-label="Optional comment"/>
+										</div>
+									</div>
+								</form>
+								<div class="underline"></div>
+								<div class="d-flex flex-column">
+									<div class="btn-customized-group px-2" role="group">
+										<button class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2 me-1" id="buttonToSubmitForm" type="submit" aria-label="Add expense">Add</button>
+										<a class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2 ms-1" href="/menu/display">Cancel</a>
+									</div>
+								</div>								
+							</div>
+						</div>	
+					</div>	
+				</div>
+			</article>	
+		</div>	
+	</main>	
+
+{% endblock %}
+
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/addExpenseFunctionality.js"></script>
+
+{% endblock %}

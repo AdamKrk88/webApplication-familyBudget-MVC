@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    //declaration for fields with amount and date
+   //declaration for fields with amount and date
     const amountInput = $('#amount');
     const dateInput = $('#date');
     var isRequiredFieldsBlank;
@@ -12,35 +12,16 @@ $(document).ready(function() {
 
     var maxDate = dateObject.getFullYear() + '-' +
     (month<10 ? '0' : '') + month + '-' + lastDay;
-   
 
     //restriction for amount and date fields
     amountInput.attr('min','0.01');
     dateInput.attr('min','2023-01-01');
     dateInput.attr('max', maxDate);
     
-
-    //if no categories available, then submit button inactive
-    if ($('#no-categories').length > 0) {
+    //submit button disabled if expense categories or payment method not available 
+    if ($('#no-categories').length > 0 || $('#no-payment-option').length > 0) {
         $('#buttonToSubmitForm').prop('disabled', true);
     }
-
-  /*  //no possibilty to type +, -, e, E in amount field
-    amountInput.get(0).oninput = function() {
-        this.value = this.value.replace(/[e\+\-]/i, "");
-    }; 
-*/
-    //only numbers allowed in amount field
- /*   amountInput.keypress(function(e) {
-        if (e.which < 46 || (e.which > 46 && e.which < 48) || e.which > 57) {
-            e.preventDefault();
-        }
-    });
-*/
-    //no manual, direct input from keyboard allowed
-    dateInput.keypress(function(e) {
-        e.preventDefault();
-    });
 
     //restriction for amount input provided as manual, so from keyboard
     amountInput.on('keypress', function (event) {
@@ -48,8 +29,7 @@ $(document).ready(function() {
         var regexNext = new RegExp("[e\+\-]","i");
         var resultOfMatch = $(this).val().match(/^\d+\.?\d?$/) ? true : false;
         var key = String.fromCharCode(!event.key ? event.which : event.charCode);
-//   alert(resultOfMatch);
- //  alert(key);
+
         if ($(this).val().length == 0 && regexInputBeginning.test(key)) {
             event.preventDefault(); 
         }      
@@ -59,27 +39,28 @@ $(document).ready(function() {
         }
     });
 
-
     //keep two decimal places
     amountInput.change(function () {
-      //   alert(this.val().match(/^\d+\.?\d?\d?/g));
         var result = parseFloat($(this).val()).toFixed(2);
         $(this).val(result);
-  //   $(this).val(resultOfMatch);
-   //  alert(typeof amountInput.val());
-//       alert(resultOfMatch);
+    });   
+ 
+
+    //no manual input for date
+    dateInput.keypress(function(e) {
+        e.preventDefault();
     });
-   
+    
     //action to be taken after button click
     $('#buttonToSubmitForm').click(function() {
         amountInput.get(0).required = false;
         dateInput.get(0).required = false;
         isRequiredFieldsBlank = false;
-    //	$('#logoForPage').focus();
-        
-    //validation if amount or date fields are empty
+   //     $('#logoForPage').focus();
+       
+        //validation if amount or date fields are empty
         if(amountInput.val() =='' || amountInput.val().length - 1 == 0) {
-            $('#incomeRegisterConfirmation > p').html('');
+            $('#expenseRegisterConfirmation > p').html('');
             amountInput.get(0).required = true;
             amountInput.get(0).oninput = function() {this.setCustomValidity('');};
             amountInput.get(0).oninvalid = function() {this.setCustomValidity('Please fill out this field');};
@@ -87,7 +68,7 @@ $(document).ready(function() {
             isRequiredFieldsBlank = true;
         }
         else if(dateInput.val() =='' || dateInput.val().length == 0) {
-            $('#incomeRegisterConfirmation > p').html('');
+            $('#expenseRegisterConfirmation > p').html('');
             dateInput.get(0).required = true;
             dateInput.get(0).oninput = function() {this.setCustomValidity('');};
             dateInput.get(0).oninvalid = function() {this.setCustomValidity('Please fill out this field');};
@@ -108,12 +89,12 @@ $(document).ready(function() {
                     data: $('#secondForm').serialize(),
                     success: function(errorMessage) {
                         if(!errorMessage) {
-                            $('#incomeRegisterConfirmation > p').html('Income is registered successfully. Click <a href=\"/income/displayIncomeForm\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
+                            $('#expenseRegisterConfirmation > p').html('Expense is registered successfully. Click <a href=\"/expense/displayExpenseForm\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
                             $('#buttonToSubmitForm').prop('disabled', true);
                         }
                         else {
                             var json = JSON.parse(errorMessage);
-                            $('#incomeRegisterConfirmation > p').html(json);
+                            $('#expenseRegisterConfirmation > p').html(json);
                             $('#buttonToSubmitForm').blur();
                         }
                     },

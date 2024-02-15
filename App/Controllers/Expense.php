@@ -23,8 +23,4 @@ class Expense extends Authenticated
         ]);
     }
 
-    public function processAjax() 
-    {
-
-    }
 }

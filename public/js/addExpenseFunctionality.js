@@ -7,11 +7,11 @@ $(document).ready(function() {
     //get last day of the month
     var dateObject = new Date();
     var month = dateObject.getMonth() + 1;
-    var lastDayDateFormat = new Date(dateObject.getFullYear(), month, 0);
-    var lastDay = lastDayDateFormat.getDate();
+ //   var lastDayDateFormat = new Date(dateObject.getFullYear(), month, 0);
+    var currentDay = dateObject.getDate();
 
     var maxDate = dateObject.getFullYear() + '-' +
-    (month<10 ? '0' : '') + month + '-' + lastDay;
+    (month<10 ? '0' : '') + month + '-' + currentDay;
 
     //restriction for amount and date fields
     amountInput.attr('min','0.01');
@@ -77,16 +77,16 @@ $(document).ready(function() {
         }
         
         //action to be taken after successful amount and date fields verification - insert data into database or error message
-        if (!isRequiredFieldsBlank) {
+        if (!isRequiredFieldsBlank) {    
             $.ajax({
                 type: "POST",
                 url: "/ajax/processFirstForm",
-                data: $('#firstForm').serialize(),
+                data: $('#firstForm').serialize()+"&ajax="+true,
             }).done(function() {
                 $.ajax({
                     type: "POST",
                     url: "/ajax/processSecondForm",
-                    data: $('#secondForm').serialize(),
+                    data: $('#secondForm').serialize()+"&ajax="+true,
                     success: function(errorMessage) {
                         if(!errorMessage) {
                             $('#expenseRegisterConfirmation > p').html('Expense is registered successfully. Click <a href=\"/expense/displayExpenseForm\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');

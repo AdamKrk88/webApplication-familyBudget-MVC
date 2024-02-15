@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}Balance review{% endblock %}
+
+{% block header %}
+
+    <header>	
+        <nav class="navbar navbar-expand-lg navbar-light-yellow">
+            <a class="navbar-brand" id="logoForPage" href="/menu/display"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle">Budget Manager</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Button to open main menu options">
+                <span class="navbar-toggler-icon">
+                    <i class="icon-menu"></i>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item text-center"><a class="nav-link" href="/income/displayIncomeForm">Add income</a></li>
+                    <li class="nav-item text-center"><a class="nav-link" href="/expense/displayExpenseForm">Add expense</a></li>
+                    <li class="nav-item text-center"><a class="nav-link active" href="/balance/displayBalanceReview" aria-current="page">Review balance</a></li>
+                    <li class="nav-item text-center"><a class="nav-link" href="">Settings</a></li>
+                    <li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
+                </ul>
+            </div>
+        </nav>		
+    </header>
+
+{% endblock %}
+
+{% block body %}	
+		
+    <main class="content-wrapper">
+        <div class="row">
+            <article>
+                <div class="col-md-10 col-12 offset-md-1 mt-2">
+                    <div class="row g-0 bg-light-grey">
+                        <div class="col-3">   
+                            <form class="lh-1 d-flex flex-column" action="#" method="post">
+                                <label  class="form-label font-color-black font-size-scaled-from-18px fw-bolder bg-dark-grey w-100 py-1 ps-2" for="periodForBalanceSummary">Period</label>  
+                                <select class="form-select form-select-sm w-auto align-self-start fw-bold font-color-grey text-center ms-1" id="periodForBalanceSummary" name="period" aria-label="Period for balance review">
+                                    <option value="1" selected>Current month</option>
+                                    <option value="2">Previous month</option>
+                                    <option value="3">Current year</option>
+                                    <option value="4">Your choice</option>
+                                </select>
+                            </form>
+                            <div class="modal fade" id="boxToProvidePeriodForBalanceSummary" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dateRange" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title font-size-scaled-from-18px fw-bold" id="dateRange">Provide date range for balance review</h5>
+                                            <button type="button" id="closeModalSymbol" class="btn-close  font-size-scaled-from-15px" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-0 d-block text-center" for="startDate">From</label>
+                                                <input class="form-control form-control-sm fw-bold font-color-grey text-center" type="date" name="startDate" id="startDate" min="2000-01-01" title="Please fill out this field" aria-label="Start date for balance review period" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                                                <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-0 d-block text-center mt-4" for="endDate">To</label>
+                                                <input class="form-control form-control-sm fw-bold font-color-grey text-center" type="date" name="endDate" id="endDate" min="2000-01-01" title="Please fill out this field" aria-label="End date for balance review period" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')"/>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <span id="errorMessage" class="flex-fill text-center fw-bold font-size-scaled-from-15px font-red"></span>
+                                            <button type="button" id="closeModalButton" class="btn button-grey-color fw-bold font-size-scaled-from-15px" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                            <button type="button" id="submitModalButton" class="btn button-grey-color fw-bold font-size-scaled-from-15px" aria-label="Save date range">Save the period</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>									
+                        </div> 
+                        <div class="col-3 text-center" style="font-size: 1rem;">  
+                            <h3 class="lh-1 font-color-black fw-bolder font-size-scaled-from-18px bg-dark-grey w-100 mt-0 py-1 form-label">Income</h3>
+                            <p class="font-size-scaled-from-15px bg-light-grey mb-0 d-inline-block align-middle" id="switcher-incomeLink-presentedInformation">Click <a class="font-light-stronger-orange link-registration-income-expense" id="linkToPresentIncomes" href="">here</a></p>
+                        </div>   
+                        <div class="col-3 text-center" style="font-size: 1rem;">  
+                            <h3 class="lh-1 font-color-black fw-bolder font-size-scaled-from-18px bg-dark-grey w-100 mt-0 py-1 form-label">Expense</h3>
+                            <p class="font-size-scaled-from-15px bg-light-grey mb-0 d-inline-block align-middle" id="switcher-expenseLink-presentedInformation">Presented</p>
+                        </div> 
+                        <div class="col-3 text-end" style="font-size: 1rem;">
+                            <h3 class="lh-1 font-color-black fw-bolder font-size-scaled-from-18px bg-dark-grey w-100 mt-0 py-1 pe-2 form-label">Balance</h3>
+                            <p class="font-size-scaled-from-15px bg-light-grey mb-0 d-inline-block align-middle pe-2" id="total-balance">{{ balance }}</p>
+                        </div>
+                        <div class="col-12 text-center font-orange">
+                            <div class="underline py-1"></div>
+                            <p class="font-size-scaled-from-15px mb-0 mt-1" id="balance-comment">{% if balance > 0 %}Congratulations. You are focused on efficiency in financial management{% elseif balance < 0 %}Your balance is below zero. Review your budget{% else %}Balance is equal to zero{% endif %}</p>
+                        </div>
+                    </div>																								
+                </div>
+                
+                <div class="col-md-10 col-12 offset-md-1 mt-4">
+                    <div class="row g-0 bg-light-grey">
+                        <div class="col-12 bg-dark-grey">
+                            <h3 class="font-color-black fw-bolder font-size-scaled-from-18px text-center mb-0 py-1 position-relative" id="presented-table-name">Expenses<a class="position-absolute top-50 start-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 ps-2" href="" id="chart-list-switcher"><em>Chart / List Switcher</em></a></h3>
+                        </div>
+                        <div class="col-12">
+                            <p class="font-color-black font-size-scaled-from-15px mb-0 mt-0 text-center mt-1" id="noDataComment">{% if categoryTotalAmountValueForExpense is empty %} Nothing to show {% endif %}</p>
+                    
+                            <div class="table-responsive">	
+                                <table class="table table-borderless font-size-scaled-from-15px font-color-black mb-0 text-center">							
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="p-0 fw-bolder" style="width:10%" id="id-list"></th>
+                                            <th scope="col" class="p-0 fw-bolder" style="width:15%" id="date-list"></th>
+                                            <th scope="col" class="p-0 fw-bolder" style="width:16%" id="category-list"></th>
+                                            <th scope="col" class="p-0 fw-bolder" style="width:16%" id="payment-list"></th>
+                                            <th scope="col" class="p-0 fw-bolder" style="width:30%" id="comment-list"></th>
+                                            <th scope="col" class="p-0 fw-bolder" style="width:13%" id="amount-list"></th>
+                                        </tr>
+                                    </thead>	
+
+                                    <tbody>
+                                        {% for i in 0..6 %}
+                                        <tr>
+                                            <th scope="row" id="th-id-{{ i }}" class="p-0"></th>
+                                            <td id="td-date-{{ i }}" class="p-0"></td>
+                                            <td id="td-category-{{ i }}" class="p-0"></td>
+                                            <td id="td-payment-{{ i }}" class="p-0"></td>
+                                            <td id="td-comment-{{ i }}" class="p-0"></td>
+                                            <td id="td-amount-{{ i }}" class="p-0"></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>	
+                                </table>
+                            </div>
+
+
+                            <div class="row g-0">
+                                <div class="col-4">
+                                    <div class="table-responsive d-flex align-items-start justify-content-between mt-1">	
+                                        <table class="table table-borderless font-size-scaled-from-15px font-color-black lh-1 w-auto mb-0">							
+                                            <tbody>
+                                                {% set arrayLengthMinusOne = categoryTotalAmountValueForExpense|length - 1 %}
+                                                {% set numberOfCategoriesInFirstTableDoubled = numberOfCategoriesInFirstTable * 2 %}
+                                                {% for i in 0..arrayLengthMinusOne %}
+                                                    {% if loop.index0 % 2 == 0 %}
+                                                <tr>
+                                                    <th scope="row" id="th{{ i }}">{{ categoryTotalAmountValueForExpense[i][0] }}</th>
+                                                    <td id="td{{ i }}">{{ categoryTotalAmountValueForExpense[i][1] }}</td>
+                                                </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if numberOfCategoriesInFirstTableDoubled < 18 %}
+                                                    {% for i in numberOfCategoriesInFirstTableDoubled..16 %}
+                                                        {% if i % 2 == 0 %}
+                                                <tr>
+                                                    <th scope="row" class="p-0" id="th{{ i }}"></th>
+                                                    <td class="p-0" id="td{{ i }}"></td>
+                                                </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </tbody>	
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="myChartDiv" class="col-4 p-0">
+                                    {% if categoryTotalAmountValueForExpense is not empty %}
+                                    <canvas id="myChart"></canvas>
+                                    {% endif %}    
+                                </div>
+
+                                <div class="col-3 offset-1">
+                                    <div class="table-responsive d-flex align-items-start justify-content-end mt-1">
+                    
+                                        <table class="table table-borderless font-size-scaled-from-15px font-color-black lh-1 w-auto mb-0">				
+                                            <tbody>
+                                                {% set numberOfCategoriesInSecondTableDoubledPlusOne = numberOfCategoriesInSecondTable * 2 + 1 %}
+                                                {% for i in 1..arrayLengthMinusOne %}
+                                                    {% if loop.index0 % 2 == 0 %}
+                                                <tr>
+                                                    <th scope="row" id="th{{ i }}">{{ categoryTotalAmountValueForExpense[i][0] }}</th>
+                                                    <td id="td{{ i }}">{{ categoryTotalAmountValueForExpense[i][1] }}</td>
+                                                </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if numberOfCategoriesInSecondTableDoubledPlusOne < 18 %}
+                                                    {% for i in numberOfCategoriesInSecondTableDoubledPlusOne..17 %}
+                                                        {% if i % 2 == 1 %}
+                                                <tr>	
+                                                    <th scope="row" class="p-0" id="th{{ i }}"></th>
+                                                    <td class="p-0" id="td{{ i }}"></td>
+                                                </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>							
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col-6 text-center font-size-scaled-from-15px bg-dark-grey" id="previous-link-div">
+                            <a class="link-registration-income-expense font-color-black fst-italic fw-bolder" id="previous-link" href=""></a>
+                        </div>
+                        <div class="col-6 text-center font-size-scaled-from-15px bg-dark-grey" id="next-link-div">
+                            <a class="link-registration-income-expense font-color-black fst-italic fw-bolder" id="next-link" href=""></a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+		
+{% endblock %}
+
+{% block footer %}
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.min.js"></script>
+    
+    <script>
+        var categoryTotalAmountValueForExpense = {{ categoryTotalAmountValueForExpense|json_encode|raw }};
+        var totalExpense = {{ totalExpense|json_encode|raw }};
+    </script>
+
+    <script src="/js/balanceReview.js"></script>
+
+{% endblock %}

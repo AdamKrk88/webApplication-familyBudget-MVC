@@ -21,8 +21,4 @@ class Income extends Authenticated
         ]);
     }
 
-    public function processAjax() 
-    {
-
-    }
 }

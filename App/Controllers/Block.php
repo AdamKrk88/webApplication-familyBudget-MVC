@@ -12,17 +12,10 @@ use \Core\View;
 
 class Block extends \Core\Controller
 {
- 
- 
-    public function stopAjaxProcessingAction() 
-    {
-        View::renderTemplate('Block/ajax_blocked.html');
-    }
-
-    /*
+   
     public function stopDisplayNoJavaScript()
     {
-
+        View::renderTemplate('Block/javaScript_blocked.html');
     }
-    */
+    
 }

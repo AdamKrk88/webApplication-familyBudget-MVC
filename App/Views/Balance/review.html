@@ -130,14 +130,16 @@
                                             <tbody>
                                                 {% set arrayLengthMinusOne = categoryTotalAmountValueForExpense|length - 1 %}
                                                 {% set numberOfCategoriesInFirstTableDoubled = numberOfCategoriesInFirstTable * 2 %}
-                                                {% for i in 0..arrayLengthMinusOne %}
-                                                    {% if loop.index0 % 2 == 0 %}
+                                                {% if arrayLengthMinusOne >= 0 %}
+                                                    {% for i in 0..arrayLengthMinusOne %}
+                                                        {% if loop.index0 % 2 == 0 %}
                                                 <tr>
                                                     <th scope="row" id="th{{ i }}">{{ categoryTotalAmountValueForExpense[i][0] }}</th>
-                                                    <td id="td{{ i }}">{{ categoryTotalAmountValueForExpense[i][1] }}</td>
+                                                    <td id="td{{ i }}">{{ categoryTotalAmountValueForExpense[i][1] }}</td>   
                                                 </tr>
-                                                    {% endif %}
-                                                {% endfor %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
                                                 {% if numberOfCategoriesInFirstTableDoubled < 18 %}
                                                     {% for i in numberOfCategoriesInFirstTableDoubled..16 %}
                                                         {% if i % 2 == 0 %}
@@ -165,14 +167,16 @@
                                         <table class="table table-borderless font-size-scaled-from-15px font-color-black lh-1 w-auto mb-0">				
                                             <tbody>
                                                 {% set numberOfCategoriesInSecondTableDoubledPlusOne = numberOfCategoriesInSecondTable * 2 + 1 %}
-                                                {% for i in 1..arrayLengthMinusOne %}
-                                                    {% if loop.index0 % 2 == 0 %}
-                                                <tr>
-                                                    <th scope="row" id="th{{ i }}">{{ categoryTotalAmountValueForExpense[i][0] }}</th>
-                                                    <td id="td{{ i }}">{{ categoryTotalAmountValueForExpense[i][1] }}</td>
-                                                </tr>
-                                                    {% endif %}
-                                                {% endfor %}
+                                                {% if arrayLengthMinusOne >= 1 %}
+                                                    {% for i in 1..arrayLengthMinusOne %}
+                                                        {% if loop.index0 % 2 == 0 %}
+                                                    <tr>
+                                                        <th scope="row" id="th{{ i }}">{{ categoryTotalAmountValueForExpense[i][0] }}</th>
+                                                        <td id="td{{ i }}">{{ categoryTotalAmountValueForExpense[i][1] }}</td>
+                                                    </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
                                                 {% if numberOfCategoriesInSecondTableDoubledPlusOne < 18 %}
                                                     {% for i in numberOfCategoriesInSecondTableDoubledPlusOne..17 %}
                                                         {% if i % 2 == 1 %}

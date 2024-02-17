@@ -537,6 +537,8 @@
 	}	
 	
 	function checkDateInModal() {	
+		var startDateValuePrevious = startDateValue;
+		var endDateValuePrevious = endDateValue;
 		startDateValue =$("#startDate").val();  
 		endDateValue = $("#endDate").val();
 		if (startDateValue != "" && endDateValue != "") {
@@ -551,6 +553,8 @@
 	
 		if (startDateValue == "" || endDateValue == "") { 
 			$("#errorMessage").addClass("font-red").removeClass("font-green").html("Provide dates");
+			startDateValue = startDateValuePrevious;
+			endDateValue = endDateValuePrevious;
 			return false;
 		}
 		
@@ -558,6 +562,8 @@
 			$("#startDate").css("background-color","#ff8080");
 			$("#endDate").css("background-color","#ff8080");
 			$("#errorMessage").addClass("font-red").removeClass("font-green").html("Both dates greater than current date");
+			startDateValue = startDateValuePrevious;
+			endDateValue = endDateValuePrevious;
 			return false;
 		}
 		
@@ -565,6 +571,8 @@
 			$("#startDate").css("background-color","#ff8080");
 			$("#endDate").removeAttr("style");
 			$("#errorMessage").addClass("font-red").removeClass("font-green").html("Start date greater than current date");
+			startDateValue = startDateValuePrevious;
+			endDateValue = endDateValuePrevious;
 			return false;
 		}
 		
@@ -572,6 +580,8 @@
 			$("#endDate").css("background-color","#ff8080");
 			$("#startDate").removeAttr("style");
 			$("#errorMessage").addClass("font-red").removeClass("font-green").html("End date greater than current date");
+			startDateValue = startDateValuePrevious;
+			endDateValue = endDateValuePrevious;
 			return false;
 		}
 		
@@ -579,6 +589,8 @@
 			$("#startDate").css("background-color","#ff8080");
 			$("#endDate").removeAttr("style");
 			$("#errorMessage").addClass("font-red").removeClass("font-green").html("Start date greater than end date");	
+			startDateValue = startDateValuePrevious;
+			endDateValue = endDateValuePrevious;
 			return false;
 		}
 		

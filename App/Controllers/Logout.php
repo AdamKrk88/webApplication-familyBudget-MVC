@@ -21,7 +21,7 @@ class Logout extends Authenticated
     {
         Auth::logout();
 
-        $this->redirect('/login/showLogoutMessage');
+        $this->redirect('/login/show-logout-message');
     }
-
+    
 }

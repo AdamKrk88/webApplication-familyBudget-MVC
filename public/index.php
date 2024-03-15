@@ -38,5 +38,8 @@ $router->add('logout', ['controller' => 'Logout', 'action' => 'destroy']);
 $router->add('{controller}/{action}');
 $router->add('password/reset/{token:[\da-f]+}', ['controller' => 'Password', 'action' => 'reset']);
 $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'action' => 'activate']);
-    
+$router->add('settings/email-activate/{token:[\da-f]+}', ['controller' => 'Settings', 'action' => 'activateNewEmail']);
+$router->add('settings/display-settings/{option:user|income|expense}', ['controller' => 'Settings', 'action' => 'displaySettings']);
+$router->add('settings/display-settings/user/{option:change-name|change-email|change-password|profile}', ['controller' => 'Settings', 'action' => 'displaySettings']);  
+
 $router->dispatch($_SERVER['QUERY_STRING']);

@@ -89,7 +89,7 @@ $(document).ready(function() {
                     data: $('#secondForm').serialize()+"&ajax="+true,
                     success: function(errorMessage) {
                         if(!errorMessage) {
-                            $('#expenseRegisterConfirmation > p').html('Expense is registered successfully. Click <a href=\"/expense/displayExpenseForm\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
+                            $('#expenseRegisterConfirmation > p').html('Expense is registered successfully. Click <a href=\"/expense/display-expense-form\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
                             $('#buttonToSubmitForm').prop('disabled', true);
                         }
                         else {

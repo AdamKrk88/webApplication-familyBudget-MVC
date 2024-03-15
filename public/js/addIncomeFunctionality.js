@@ -108,7 +108,7 @@ $(document).ready(function() {
                     data: $('#secondForm').serialize()+"&ajax="+true,
                     success: function(errorMessage) {
                         if(!errorMessage) {
-                            $('#incomeRegisterConfirmation > p').html('Income is registered successfully. Click <a href=\"/income/displayIncomeForm\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
+                            $('#incomeRegisterConfirmation > p').html('Income is registered successfully. Click <a href=\"/income/display-income-form\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
                             $('#buttonToSubmitForm').prop('disabled', true);
                         }
                         else {

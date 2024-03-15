@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use \App\Models\User;
 use \App\Models\CashFlow;
+use \App\Auth;
+use \App\Flash;
 
 /**
  * AJAX - used to send asynchronous HTTP requests to the server 
@@ -286,6 +288,19 @@ class Ajax extends \Core\Controller
         }
 
         echo json_encode($dataToUpdateFirstPage);
+    }
+
+    public function deleteAccount()
+    {
+        $isDeleted = User::deleteUserAccount($_SESSION['user_id']);
+        $deletionResult = $isDeleted ? true : false;
+        
+        if ($deletionResult)
+        {
+            Auth::logout();
+        }
+        
+        echo json_encode($deletionResult);
     }
 
 }

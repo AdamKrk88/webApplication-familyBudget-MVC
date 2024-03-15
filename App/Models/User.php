@@ -147,6 +147,134 @@ class User extends \Core\Model
         return $stmt->fetch();
     }
 
+    public function validateUsername()
+    {
+        $this->username = static::testInput($this->username);
+        
+         //Name
+        if ($this->username == '') 
+        {
+            $this->errors[] = 'Name is required';
+        }
+        elseif ($this->username != '') 
+        {
+            if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$this->username)) 
+            {
+                $this->errors[] = "Only letters and one space allowed in name. Please use standard English characters";
+            }
+        }
+    }
+
+    public function validateNewEmail()
+    {
+        $this->email_change = static::testInput($this->email_change);
+
+        if ($this->email_change == '') 
+        {
+            $this->errors[] = 'Email is required';
+        }
+        elseif ($this->email_change != '') 
+        {
+            $this->email_change = filter_var($this->email_change, FILTER_SANITIZE_EMAIL);
+            if (!filter_var($this->email_change, FILTER_VALIDATE_EMAIL)) 
+            {
+                $this->errors[] = "Invalid email format";
+            }
+            elseif (static::emailExistsIgnoreIfNeeded($this->email_change)) 
+            {
+                $this->errors[] = "Error. Provided email exists";
+            }
+        }
+
+    }
+
+    public function validateNewPassword()
+    {
+        $this->new_password = trim($this->new_password);
+
+        if ($this->new_password == '') 
+        {
+            $this->errors[] = 'Password is required';
+        }
+        elseif ($this->new_password !='') 
+        {
+            $uppercase = preg_match('@[A-Z]@', $this->new_password);
+            $lowercase = preg_match('@[a-z]@', $this->new_password);
+            $number    = preg_match('@[0-9]@', $this->new_password);
+            $specialChars = preg_match('@[^\w]@', $this->new_password);
+            
+            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($this->new_password) < 10 ) 
+            {
+                $this->errors[] = 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character. Length at least 10 characters';
+            }
+        }
+    }
+
+    public function changeUsername()
+    {
+        $sql = 'UPDATE users
+                SET username = :username
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':username', $this->username, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function startEmailChange()
+    {
+        $token = new Token();
+        $hashed_token = $token->getHash();
+        $this->activation_token = $token->getValue(); 
+
+        $sql = 'UPDATE users 
+                SET email_change = :email_change,
+                    email_change_hash = :email_change_hash
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':email_change', $this->email_change, PDO::PARAM_STR);
+        $stmt->bindValue(':email_change_hash', $hashed_token, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();      
+    }
+
+    public function checkIfPasswordIsDifferent()
+    {
+        return !password_verify($this->new_password, $this->password);
+    }
+
+
+    /**
+     *  Change the password
+     *
+     * @return boolean  True if the password was changed successfully, false otherwise
+     */
+    public function changePasswordByLoggedInUser()
+    {
+        $password_hash = password_hash($this->new_password, PASSWORD_DEFAULT);
+
+        $sql = 'UPDATE users
+                SET password = :password_hash
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+                                        
+        $stmt->execute();
+        
+        return $stmt->rowCount() ? true : false;
+    }
 
     /**
      * Validation for name, email and password. Error array is populated with message if any error is detected
@@ -396,6 +524,21 @@ class User extends \Core\Model
     }
 
     /**
+     * Send an email to the new user mailbox containing the activation link to confirm email change
+     *
+     * @return void
+     */
+    public function sendEmailChangeInformationToUserNewMailbox()
+    {
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/settings/email-activate/' . $this->activation_token;
+
+        $text = View::getTemplate('Settings/email_change_email.txt', ['url' => $url]);
+        $html = View::getTemplate('Settings/email_change_email.html', ['url' => $url]);
+
+        Mail::send($this->email_change, 'Email change - please confirm', $text, $html);
+    }
+
+    /**
      * Activate the user account with the specified activation token
      *
      * @param string $value Activation token from the URL
@@ -413,7 +556,7 @@ class User extends \Core\Model
         $stmt->bindValue(':hashed_token', $hashed_token, PDO::PARAM_STR);
 
         $stmt->execute();
-
+        
         if ($sqlType == "Select")
         {
             $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
@@ -439,6 +582,27 @@ class User extends \Core\Model
         return static::connectDatabaseWithActivationToken($sql, $value);
     }
 
+    public function updateEmail($value)
+    {
+        $sql = 'UPDATE users
+                SET email = :email,
+                    email_change =\'\'
+                WHERE email_change_hash = :hashed_token';
+
+        $token = new Token($value);
+        $hashed_token = $token->getHash();
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':hashed_token', $hashed_token, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $this->email_change, PDO::PARAM_STR);
+        
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
     public static function clearActivationToken($value)
     {
         $sql = 'UPDATE users
@@ -446,6 +610,23 @@ class User extends \Core\Model
                 WHERE activation_hash = :hashed_token';
     
         static::connectDatabaseWithActivationToken($sql, $value, "Update");
+    }
+
+    public static function clearEmailChangeToken($value)
+    {
+        $sql = 'UPDATE users
+                SET email_change_hash = null
+                WHERE email_change_hash = :hashed_token';
+    
+        static::connectDatabaseWithActivationToken($sql, $value, "Update");
+    }
+
+    public static function getUserNewEmail($value)
+    {
+        $sql = 'SELECT email_change FROM users
+                WHERE email_change_hash = :hashed_token';
+
+        return static::connectDatabaseWithActivationToken($sql, $value);
     }
 
     public function returnDefaultCategoriesForIncome() 
@@ -647,6 +828,21 @@ class User extends \Core\Model
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
        
+    }
+
+    public static function deleteUserAccount($id)
+    {
+        $sql = 'DELETE FROM users 
+                WHERE id = :id';
+           
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);  
+
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
     }
 
 }

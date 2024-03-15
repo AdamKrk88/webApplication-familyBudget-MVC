@@ -1,0 +1,9 @@
+Dear User,
+
+Please click the following link to confirm the email change to Budget Manager application:
+{{ url }}
+
+Best regards,
+BM application
+
+*This email is sent automatically on your demand. Please do not reply to it

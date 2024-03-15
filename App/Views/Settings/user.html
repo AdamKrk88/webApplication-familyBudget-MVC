@@ -14,10 +14,10 @@
 			</button>
 			<div class="collapse navbar-collapse" id="mainmenu">
 				<ul class="navbar-nav ms-auto">
-					<li class="nav-item text-center"><a class="nav-link" href="/income/displayIncomeForm">Add income</a></li>
-					<li class="nav-item text-center"><a class="nav-link" href="/expense/displayExpenseForm">Add expense</a></li>
-					<li class="nav-item text-center"><a class="nav-link" href="/balance/displayBalanceReview">Review balance</a></li>
-					<li class="nav-item text-center"><a class="nav-link active" href="/settings/displaySettings" aria-current="page">Settings</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
+					<li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings" aria-current="page">Settings</a></li>
 					<li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
 				</ul>
 			</div>
@@ -34,19 +34,71 @@
                 <div class="col-lg-8 col-md-10 col-sm-12 bg-light-grey mx-auto">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <h2 class="font-color-black fw-bolder font-size-scaled-from-30px">Customize your application</h2>
-                            <div class="underline"></div>
-                            <ul class="navbar-nav flex-row font-size-scaled-from-18px">
-                                <li class="nav-item text-center flex-even settings-option-style"><a class="nav-link" href="">User</a></li>
-                                <li class="nav-item text-center flex-even settings-option-style"><a class="nav-link" href="">Expense</a></li>
-                                <li class="nav-item text-center flex-even settings-option-style"><a class="nav-link" href="">Income</a></li>
-                            </ul>
+
+                            <h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 py-1">User
+                                <a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings">Back</a>
+                            </h2>
+                            <div class="underline"></div>	
 
                         </div>
+                        <div class="col-6 text-center">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/user/change-name">Change name</a>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/user/change-email">Change email</a>
+                        </div>
+                        <div class="col-6 text-center pb-1">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/user/change-password">Change password</a>
+                        </div>
+                        <div class="col-6 text-center pb-1">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/user/profile">Your profile</a>
+                        </div>
+                        <div class="col-6 text-center mx-auto pb-1">
+                   <!--         <a class="w-95 btn button-light-red-color fw-bold font-size-scaled-from-15px mt-2" id="btn-delete" href="">Delete account</a>   -->
+                            <button type="button" class="btn w-95 button-light-red-color fw-bold font-size-scaled-from-15px mt-2" id="btn-delete" data-bs-toggle="modal" data-bs-target="#delete-confirmation-modal">Delete account</button>
+                        </div>
+
+
                     </div>
                 </div>
             </article>
         </div>
+        <div class="modal fade" id="delete-confirmation-modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title font-size-scaled-from-30px fw-bold" id="exampleModalLabel">User account deletion</h5>
+                  <button type="button" class="btn-close font-size-scaled-from-15px" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body fw-normal">
+                  <p>Are you sure you want to permanently delete your account? This action can't be undone.</p>
+                  <p>We will delete all your data. Click "yes" to confirm</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="w-50 btn button-light-red-color fw-bold font-size-scaled-from-15px" id="btn-delete-confirmation">Yes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="error-message-modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title font-size-scaled-from-30px fw-bold" id="error-modal-title">Error</h5>
+                  <button type="button" class="btn-close font-size-scaled-from-15px" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body fw-normal">
+                  <p>Error appears while processing account deletion. Account deletion failed</p>
+                </div>
+                <div class="modal-footer justify-content-center" id="error-modal-button-position">
+                  <button type="button" class="w-50 btn button-grey-color fw-bold font-size-scaled-from-15px" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        
     </main>
     
 {% endblock %}       
@@ -54,5 +106,5 @@
 {% block footer %}
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-
+    <script src="/js/removeFocusAfterClicking.js"></script>
 {% endblock %}

@@ -22,10 +22,14 @@ class Login extends OpenAccess
      */
     public function newAction()
     {
-
         View::renderTemplate('Login/login.html');  
     }
 
+    /**
+     * Show the no authorization page - for users not logged in 
+     * 
+     * @return void
+     */
     public function blockAccessAction()
     {
         View::renderTemplate('Login/no_authorization.html');
@@ -68,6 +72,19 @@ class Login extends OpenAccess
     public function showLogoutMessageAction()
     {
         Flash::addMessage('Logout successful', Flash::ORANGE);
+        
+        $this->redirect('/');
+    }
+
+
+    /**
+     * Show a flash message about account deletion and redirect to the homepage.
+     *
+     * @return void
+     */
+    public function redirectAfterDeletionAction()
+    {
+        Flash::addMessage('Account deleted', Flash::ORANGE);
         
         $this->redirect('/');
     }

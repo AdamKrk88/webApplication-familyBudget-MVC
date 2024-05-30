@@ -6,6 +6,7 @@ use \App\Models\User;
 use \App\Models\CashFlow;
 use \App\Auth;
 use \App\Flash;
+use \App\Validation;
 
 /**
  * AJAX - used to send asynchronous HTTP requests to the server 
@@ -55,12 +56,12 @@ class Ajax extends \Core\Controller
      */
     public function processFirstFormAction()
     {
-        $_SESSION['amount'] = User::testInput($_POST['amount']);
-        $_SESSION['date'] = User::testInput($_POST['date']);
+        $_SESSION['amount'] = Validation::testInput($_POST['amount']);
+        $_SESSION['date'] = Validation::testInput($_POST['date']);
 
         if (isset($_POST['payment']))
         {
-            $_SESSION['payment'] = User::testInput($_POST['payment']);
+            $_SESSION['payment'] = Validation::testInput($_POST['payment']);
         }
     }
 
@@ -71,8 +72,8 @@ class Ajax extends \Core\Controller
      */
     public function processSecondFormAction()
     {
-        $_SESSION['category'] = User::testInput($_POST['category']);
-        $_SESSION['comment'] = User::testInput($_POST['comment']);
+        $_SESSION['category'] = Validation::testInput($_POST['category']);
+        $_SESSION['comment'] = Validation::testInput($_POST['comment']);
 
         $error = static::checkComment($_SESSION['comment']);
 
@@ -301,6 +302,35 @@ class Ajax extends \Core\Controller
         }
         
         echo json_encode($deletionResult);
+    }
+
+    public function getDateFromDatabaseForExpenseItemAction() 
+    {
+        $dateFromDatabase = [];
+
+        if ($_POST['expenseIncomeNumber']) 
+        {
+            $expenseNumber = $_POST['expenseIncomeNumber'];
+         //   $valueNotAllowed = array("--","0.", "0.0", "0.00");
+            $isMatched = preg_match("/^[1-9]+\d*$/",$expenseNumber) ? true : false;
+            
+            if ($isMatched)
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+
+                if (is_array($expenseIdArray) && !empty($expenseIdArray))
+                {
+                    $expenseId = $expenseIdArray[(int)$expenseNumber - 1]['id'];
+                    $expenseId = (int)$expenseId;
+                    $singleExpense = CashFlow::returnSingleExpenseItem($expenseId);
+                    $dateFromDatabase['date_of_expense'] = $singleExpense->date_of_expense; 
+                    $dateFromDatabase['date_of_expense_first'] = $singleExpense->date_of_expense_first; 
+                }
+            }
+        }
+
+        echo json_encode($dateFromDatabase); 
+    
     }
 
 }

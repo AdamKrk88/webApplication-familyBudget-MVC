@@ -22,7 +22,19 @@ class Login extends OpenAccess
      */
     public function newAction()
     {
-        View::renderTemplate('Login/login.html');  
+        View::renderTemplate('Login/login.html'); 
+
+   //  $prev_date = date('Y-m-d', strtotime('2024-05-04' .' -1 day'));
+   //  var_dump(empty(['0']));
+   //     var_dump(preg_match("/^\d+\.\d\d$/","34.345")); 
+    //    var_dump(!empty($_SESSION['flash_notifications']));
+    //    var_dump(\App\Models\CashFlow::returnExpensesId(5));
+     //   View::renderTemplate('Settings/expense_list.html'); 
+     //   var_dump(\App\Models\CashFlow::checkIfCategoryPresentOnExpensesList(5,"traNsport"));
+   //  var_dump(ucfirst(strtolower("dEBit CaRd")));
+
+  // var_dump(empty(\App\Models\CashFlow::returnCategoriesAssignedToUser(5)));
+  //var_dump(empty(false));
     }
 
     /**

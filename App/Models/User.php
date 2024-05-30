@@ -6,6 +6,7 @@ use PDO;
 use \App\Token;
 use \App\Mail;
 use \Core\View;
+use \App\Validation;
 
 /**
  * User model
@@ -78,12 +79,12 @@ class User extends \Core\Model
      * 
      * @return string name, email or password after output escaping
     */
-    public static function testInput($data) {
+/*    public static function testInput($data) {
         $data = trim($data);
         $data = htmlspecialchars($data);
         return $data;
     }
-
+*/
 
     /**
      * Find a user model by email address
@@ -149,7 +150,7 @@ class User extends \Core\Model
 
     public function validateUsername()
     {
-        $this->username = static::testInput($this->username);
+        $this->username = Validation::testInput($this->username);
         
          //Name
         if ($this->username == '') 
@@ -167,7 +168,7 @@ class User extends \Core\Model
 
     public function validateNewEmail()
     {
-        $this->email_change = static::testInput($this->email_change);
+        $this->email_change = Validation::testInput($this->email_change);
 
         if ($this->email_change == '') 
         {
@@ -283,8 +284,8 @@ class User extends \Core\Model
      */
     public function validate() {
         //Output escaping
-        $this->username = static::testInput($this->username);
-        $this->email = static::testInput($this->email);
+        $this->username = Validation::testInput($this->username);
+        $this->email = Validation::testInput($this->email);
         $this->password = trim($this->password);
         
         //Name

@@ -41,5 +41,6 @@ $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'act
 $router->add('settings/email-activate/{token:[\da-f]+}', ['controller' => 'Settings', 'action' => 'activateNewEmail']);
 $router->add('settings/display-settings/{option:user|income|expense}', ['controller' => 'Settings', 'action' => 'displaySettings']);
 $router->add('settings/display-settings/user/{option:change-name|change-email|change-password|profile}', ['controller' => 'Settings', 'action' => 'displaySettings']);  
+$router->add('settings/display-settings/expense/{option:add-category|add-payment|delete-category|delete-payment|expense-list|change-category|change-payment|change-amount|change-date|change-comment|delete-item}', ['controller' => 'Settings', 'action' => 'displaySettings']);  
 
 $router->dispatch($_SERVER['QUERY_STRING']);

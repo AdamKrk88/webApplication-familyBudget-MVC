@@ -4,7 +4,7 @@ $(document).ready(function() {
     const dateInput = $('#date');
     var isRequiredFieldsBlank;
 
-    //get last day of the month
+    //get current day of the month
     var dateObject = new Date();
     var month = dateObject.getMonth() + 1;
  //   var lastDayDateFormat = new Date(dateObject.getFullYear(), month, 0);
@@ -15,6 +15,7 @@ $(document).ready(function() {
 
     //restriction for amount and date fields
     amountInput.attr('min','0.01');
+    amountInput.attr('max','1000000000');
     dateInput.attr('min','2023-01-01');
     dateInput.attr('max', maxDate);
     
@@ -22,6 +23,23 @@ $(document).ready(function() {
     if ($('#no-categories').length > 0 || $('#no-payment-option').length > 0) {
         $('#buttonToSubmitForm').prop('disabled', true);
     }
+
+     //set up minimum and maximal expense/income amount for single item
+     amountInput.on('input', function (event) {
+        var min = parseFloat($(this).attr('min'));
+        var max = parseFloat($(this).attr('max'));
+        var amountProvided = parseFloat($(this).val());
+        
+        if (amountProvided > max)
+        {
+            $(this).val(max);
+        }
+        else if (amountProvided < min)
+        {
+            $(this).val(min);
+        }       
+
+    });
 
     //restriction for amount input provided as manual, so from keyboard
     amountInput.on('keypress', function (event) {

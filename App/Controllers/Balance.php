@@ -13,7 +13,7 @@ use \App\Models\CashFlow;
 class Balance extends Authenticated
 {
 
-    public function displayBalanceReview()
+    public function displayBalanceReviewAction()
     {
     //    $categoryTotalAmountValueForExpense = CashFlow::getCategoryAndRelatedAmountForExpense($_SESSION['user_id']); 
         $categoryTotalAmountValueForExpense = CashFlow::getCategoryAndRelatedAmount($_SESSION['user_id'],'isCurrentMonthDate','expense'); 

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Email change message{% endblock %}
+
+{% block header %}
+
+    <header class="d-flex navbar-light-yellow">	
+        <div class="header-login">
+            <a class="navbar-brand" href="/"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle">Budget Manager</span></a>
+        </div>
+    </header>
+
+{% endblock %}
+
+{% block body %}
+
+	<main class="h-100">
+		<article class="web-content d-flex align-items-center justify-content-center">
+			<div class="text-center">
+                {% if flash_messages is not empty %}
+				<h1 class="fst-italic lh-lg font-size-scaled-from-45px fw-bolder font-color-black">{{ flash_messages[0].body }}</h1> 
+                {% else %}
+                <h1 class="fst-italic lh-lg font-size-scaled-from-45px fw-bolder font-color-black">Something went wrong</h1>
+                {% endif %}
+				<p class="fst-italic lh-lg font-size-scaled-from-45px fw-bolder font-color-black">Login page - click <a class="font-color-black link-registration-income-expense" href="/">here</a></p>
+			</div>
+		</article>
+	</main>
+
+{% endblock %}

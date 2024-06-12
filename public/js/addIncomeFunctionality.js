@@ -4,26 +4,46 @@ $(document).ready(function() {
     const dateInput = $('#date');
     var isRequiredFieldsBlank;
 
-    //get last day of the month
+    //get current day of the month
     var dateObject = new Date();
     var month = dateObject.getMonth() + 1;
  //   var lastDayDateFormat = new Date(dateObject.getFullYear(), month, 0);
     var currentDay = dateObject.getDate();
 
     var maxDate = dateObject.getFullYear() + '-' +
-    (month<10 ? '0' : '') + month + '-' + currentDay;
+    (month<10 ? '0' : '') + month + '-' + (currentDay<10 ? '0' : '') + currentDay;
    
 
     //restriction for amount and date fields
     amountInput.attr('min','0.01');
+    amountInput.attr('max','1000000000');
     dateInput.attr('min','2023-01-01');
     dateInput.attr('max', maxDate);
     
+    //set default date as current day
+    dateInput.val(maxDate);
 
     //if no categories available, then submit button inactive
     if ($('#no-categories').length > 0) {
         $('#buttonToSubmitForm').prop('disabled', true);
     }
+
+     //set up minimum and maximal expense/income amount for single item
+    amountInput.on('input', function (event) {
+        var min = parseFloat($(this).attr('min'));
+        var max = parseFloat($(this).attr('max'));
+        var amountProvided = parseFloat($(this).val());
+        
+        if (amountProvided > max)
+        {
+            $(this).val(max);
+        }
+        else if (amountProvided < min)
+        {
+            $(this).val(min);
+        }       
+
+    });
 
   /*  //no possibilty to type +, -, e, E in amount field
     amountInput.get(0).oninput = function() {
@@ -100,7 +120,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "/ajax/processFirstForm",
-                data: $('#firstForm').serialize()+"&ajax="+true,
+                data: $('#firstForm').serialize()+"&ajax="+true+"&currentDate="+maxDate,
             }).done(function() {
                 $.ajax({
                     type: "POST",
@@ -108,7 +128,7 @@ $(document).ready(function() {
                     data: $('#secondForm').serialize()+"&ajax="+true,
                     success: function(errorMessage) {
                         if(!errorMessage) {
-                            $('#incomeRegisterConfirmation > p').html('Income is registered successfully. Click <a href=\"/income/displayIncomeForm\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
+                            $('#incomeRegisterConfirmation > p').html('Income is registered successfully. Click <a href=\"/income/display-income-form\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
                             $('#buttonToSubmitForm').prop('disabled', true);
                         }
                         else {

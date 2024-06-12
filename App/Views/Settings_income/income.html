@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block header %}
+
+	<header>	
+		<nav class="navbar navbar-expand-lg navbar-light-yellow">
+			<a class="navbar-brand" href="/menu/display"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle">Budget Manager</span></a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Button to open main menu options">
+				<span class="navbar-toggler-icon">
+					<i class="icon-menu"></i>
+				</span>
+			</button>
+			<div class="collapse navbar-collapse" id="mainmenu">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
+					<li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings-options" aria-current="page">Settings</a></li>
+					<li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
+				</ul>
+			</div>
+		</nav>		
+ 	</header>
+
+{% endblock %}	
+
+{% block body %}	
+ 
+    <main class="content-wrapper initialHeightForContent">
+        <div class ="row g-0 initialHeightForContent align-items-center">
+            <article>
+                <div class="col-lg-8 col-md-10 col-sm-12 bg-light-grey mx-auto">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 py-1">Income
+                                <a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings-options">Back</a>
+                            </h2>
+                            <div class="underline"></div>	
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-10 col-sm-12 bg-light-grey mx-auto mb-3" id="categories-payments-list">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="font-size-scaled-from-15px fw-bold mb-0 mt-1">List of categories</p>
+                        </div>
+                        <div class="col-6 text-center pb-1">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/add-category">Add category</a>
+                        </div>
+                        <div class="col-6 text-center pb-1">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/delete-category">Delete category</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-10 col-sm-12 bg-light-grey mx-auto mb-3" id="income-modification">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <div class="underline"></div>
+                            <p class="font-size-scaled-from-15px fw-bold mb-0 mt-1">Income item modification</p>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/change-category">Change category</a>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/change-amount">Change amount</a>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/change-date">Change date</a>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/change-comment">Change comment</a>
+                        </div>
+                        <div class="col-6 mx-auto text-center pb-1">
+                            <a class="w-95 btn button-grey-color fw-bold font-size-scaled-from-15px mt-2" href="/settings/display-settings/income/delete-item">Delete income</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-10 col-sm-12 bg-light-grey mx-auto" id="income-list">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <div class="underline"></div>
+                            <p class="font-size-scaled-from-15px fw-bold mb-0 mt-1">List of incomes</p>
+                        </div>
+                        <div class="col-12 text-center pb-1">
+                            <a class="w-95 btn button-light-orange-color fw-bold font-size-scaled-from-15px mt-2" id="link-expense-income-table" href="/settings/display-settings/income/income-list">See your income list</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>      
+    </main>
+    
+{% endblock %}       
+
+{% block footer %}
+<!--
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="/js/removeFocusAfterClicking.js"></script>
+-->    
+{% endblock %}

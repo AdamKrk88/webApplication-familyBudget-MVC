@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Your profile{% endblock %}
+
+{% block header %}
+
+<header>	
+    <nav class="navbar navbar-expand-lg navbar-light-yellow">
+        <a class="navbar-brand" href="/menu/display"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle">Budget Manager</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Button to open main menu options">
+            <span class="navbar-toggler-icon">
+                <i class="icon-menu"></i>
+            </span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainmenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
+                <li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
+                <li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
+                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings-options" aria-current="page">Settings</a></li>
+                <li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
+            </ul>
+        </div>
+    </nav>		
+ </header>
+
+{% endblock %}
+
+
+{% block body %}
+
+	<main class="content-wrapper">
+		<div class="row initialHeightForContent align-items-center">
+			<article>		
+				<header>
+					<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey p-2 mx-auto">	
+						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Your profile<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/user">Back</a></h2>
+					</div>
+				</header>
+				<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey px-2 pb-2 mx-auto">	
+					<div class="underline"></div>
+                    {% if username|default and email|default %}
+                    <table class="table font-size-scaled-from-15px mt-2">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>{{ username }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>{{ email }}</td>
+                            </tr>
+                        </tbody>
+                    </table>   
+                    {% else %}
+                    <p class="font-size-scaled-from-15px mt-3 text-center">Database error</p>
+                    {% endif %}
+					
+                    <div class="d-grid mt-4">
+                        <a class="btn button-grey-color fw-bold font-size-scaled-from-15px" href="/settings/display-settings/user" aria-label="Link to redirect to main settings for user">Back</a>
+                    </div>					
+				</div>	
+			</article>
+		</div>
+	</main>
+	
+{% endblock %}

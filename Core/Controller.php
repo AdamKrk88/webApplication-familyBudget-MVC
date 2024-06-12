@@ -94,7 +94,7 @@ abstract class Controller
 
      //       Auth::rememberRequestedPage();
 
-            $this->redirect('/login/blockAccess');
+            $this->redirect('/login/block-access');
         }
     }
 

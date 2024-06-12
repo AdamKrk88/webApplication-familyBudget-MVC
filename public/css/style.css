@@ -187,6 +187,16 @@ body
 	background-color: #d9d9d9;
 }
 
+.button-light-orange-color
+{
+	background-color: #ffd9b3;
+}
+
+.button-light-red-color
+{
+	background-color: #ffd3c3;
+}
+
 .h-85
 {
 	height: 85% !important;
@@ -229,7 +239,7 @@ ul
 
 a.link-registration-income-expense
 {
-	text-decoration: none !important;
+	text-decoration: underline !important;
 	outline: none;	
 }
 
@@ -458,6 +468,26 @@ div.categorySelection:nth-last-child(4)
 {
 	position: relative;
 	flex: 1 1 auto;
+}
+
+#btn-delete:hover,
+#btn-delete:focus,
+#btn-delete-confirmation:hover,
+#btn-delete-confirmation:focus
+{
+	background-color: #ff4d4d;
+	-webkit-box-shadow: 0px 0px 4px 1px rgba(255, 0, 0, 0.54);
+	-moz-box-shadow: 0px 0px 4px 1px rgba(255, 0, 0, 0.54);
+	box-shadow: 0px 0px 4px 1px rgba(255, 0, 0, 0.54);
+}
+
+#link-expense-income-table:hover,
+#link-expense-income-table:focus
+{
+	background-color: #ffcc99;
+	-webkit-box-shadow: 0px 0px 4px 1px rgba(243, 116, 6, 1);
+	-moz-box-shadow: 0px 0px 4px 1px rgba(243, 116, 6, 1);
+	box-shadow: 0px 0px 4px 1px rgba(243, 116, 6, 1);
 }
 
 label.labelText
@@ -764,6 +794,127 @@ label#labelTextNextToList
 	border-color: #8c8c8c;
 }
 
+.modal-footer
+{
+	flex-wrap: nowrap;
+}
+
+
+.pagination
+{
+	--bs-pagination-font-size:
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button
+{
+	border: none;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover
+{
+	background: none;
+	border: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:active
+{
+	background: none;
+	box-shadow: none;
+}
+
+.page-link
+{
+	color: #333333;
+	background-color: #ffffff;
+}
+
+.page-link:focus
+{
+	box-shadow: none;
+	color: #000;  
+	background-color: #ffffff;
+}
+
+.page-link:hover
+{
+	color: #000;
+	background-color: #ffffff;
+	-webkit-box-shadow: 0px 0px 4px 1px rgba(51,51,51,1);
+	-moz-box-shadow: 0px 0px 4px 1px rgba(51,51,51,1);
+	box-shadow: 0px 0px 4px 1px rgba(51,51,51,1);
+}
+
+.active>.page-link, .page-link.active
+{
+	background-color: #808080;
+	border-color: #808080;
+	color: #ffffff;
+}
+
+.dataTables_wrapper .dataTables_filter input
+{
+	background-color: #ffffff;
+}
+
+.disabled>.page-link, .page-link.disabled:focus
+{
+	color:#666;
+}
+
+.table 
+{
+	--bs-table-border-color: #cccccc;
+}
+
+[type="search"]::-webkit-search-cancel-button 
+{
+	-webkit-appearance: none;
+	appearance: none;
+	height: 35px;
+	width: 35px;     
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='53.7' height='53.7' viewBox='0 0 53.7 53.7'><path opacity='.6' fill='%23666E6E' d='M35.6 34.4L28 26.8l7.6-7.6c.2-.2.2-.5 0-.7l-.5-.5c-.2-.2-.5-.2-.7 0l-7.6 7.6-7.5-7.6c-.2-.2-.5-.2-.7 0l-.6.6c-.2.2-.2.5 0 .7l7.6 7.6-7.6 7.5c-.2.2-.2.5 0 .7l.5.5c.2.2.5.2.7 0l7.6-7.6 7.6 7.6c.2.2.5.2.7 0l.5-.5c.2-.2.2-.5 0-.7z'/></svg>");
+	background-size: 35px 35px;   
+}
+
+.position-absolute-select
+{
+	position: absolute;
+    z-index: 0;
+/*	min-height: 31px;  */
+/*	top: 0; 
+	bottom: 0;     */ 
+	margin-top: auto; 
+	margin-bottom: auto;  
+
+
+ /* top: 19%;   */ 
+ /* margin-bottom: -8px; */   
+
+}
+
+.label-alignment
+{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.select-open
+{
+	z-index:10;
+}
+
+/*
+#categories-payments-list:hover
+{
+	background-color: #fcfcfc;
+}
+
+#expense-modification:hover
+{
+	background-color: #fcfcfc;
+}
+*/
 
 @media (max-width: 1199px)
 {
@@ -887,8 +1038,18 @@ label#labelTextNextToList
 	
 	p
 	{	
-	font-size: 15px;
+		font-size: 15px;
 	}
+
+	.pagination
+	{
+		display: block;
+	}
+
+	.dataTables_wrapper .dataTables_filter input
+	{
+		padding: 0.25rem 0.5rem;
+	} 
 }
 
 @media (max-width: 575px)

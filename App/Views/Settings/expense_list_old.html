@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <noscript>
+        <meta http-equiv="refresh" content="0;url=/block/stopDisplayNoJavaScript" />
+    </noscript>
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+    <title>Expense list</title>
+    <meta name="description" content="Monitor your incomes and expenses - manage your budget and save money" />
+    <meta name="keywords" content="money, budget, income, expense" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous"> 	
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="/css/fontello.css" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    
+    <header>	
+        <nav class="navbar navbar-expand-lg navbar-light-yellow">
+            <a class="navbar-brand" href="/menu/display"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle">Budget Manager</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Button to open main menu options">
+                <span class="navbar-toggler-icon">
+                    <i class="icon-menu"></i>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
+                    <li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
+                    <li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
+                    <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings-options" aria-current="page">Settings</a></li>
+                    <li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
+                </ul>
+            </div>
+        </nav>		
+    </header>
+
+    <div class="container web-content">
+        <main class="content-wrapper">
+            <div class ="row g-0 pt-3">
+                <header>
+                    <div class ="col-12 font-size-scaled-from-15px">
+                        <h2 class="font-color-black bg-light-grey text-center fw-bolder font-size-scaled-from-30px position-relative mb-0 mt-2 py-1">Expense
+                            <a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/expense">Back</a>
+                        </h2>
+                        <div class="underline mb-2"></div>
+                    </div>
+                </header>
+            </div>
+            <div class ="row g-0 mt-4">
+                <article>
+                    <div class ="col-12 font-size-scaled-from-15px">
+                        <table id="myDataTable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th width="10%">Number</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="20%">Category</th>
+                                    <th width="20%">Payment method</th>
+                                    <th width="15%">Date</th>
+                                    <th width="25%">Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% if expenses is not empty %}
+                                {% for expense in expenses %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ expense.amount }}</td>
+                                    <td>{{ expense.expense_category_assigned_to_user_id }}</td>
+                                    <td>{{ expense.payment_method_assigned_to_user_id }}</td>
+                                    <td>{{ expense.date_of_expense }}</td>
+                                    <td>{{ expense.expense_comment }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>  
+                        </table>
+                    </div> 
+                </article>
+            </div>
+        </main>
+
+        <div class="row footer-budget w-100">	
+            <footer class="col-12 text-center">
+                <a class="footer-link font-color-black" href="https://www.flaticon.com/free-icons/money" title="money icons" target="_blank">Money icon created by Freepik - Flaticon</a>.  
+                <a class="footer-link font-color-black d-block d-sm-inline-block" href="https://pl.freepik.com/search?format=search&query=marmur&type=photo" target="_blank">Marmur image created by rawpixel.com - pl.freepik.com</a>
+                <span class="font-color-black d-block">All rights reserved &copy; 2024. Thank you for your visit </span>    
+            </footer>
+        </div>
+    </div>
+
+  
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>    
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/js/dataTableStyle.js"></script>
+
+</body>
+</html>

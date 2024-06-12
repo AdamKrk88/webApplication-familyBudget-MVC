@@ -70,10 +70,10 @@ class CashFlow extends \Core\Model
      *
      * @return void
      */
-    public static function addIncome($userId, $amount, $date, $category, $comment)
+    public static function addIncome($userId, $amount, $date, $dateCurrent, $category, $comment)
     {
-        $sql = 'INSERT INTO incomes (user_id, income_category_assigned_to_user_id, amount, date_of_income, date_of_income_first, income_comment)
-        VALUES (:user_id, :income_category_assigned_to_user_id, :amount, :date_of_income, :date_of_income_first, :income_comment)';
+        $sql = 'INSERT INTO incomes (user_id, income_category_assigned_to_user_id, amount, date_of_income, date_of_income_current, income_comment)
+        VALUES (:user_id, :income_category_assigned_to_user_id, :amount, :date_of_income, :date_of_income_current, :income_comment)';
 
         $dbConnection = static::getDB();
         $stmt = $dbConnection->prepare($sql);
@@ -82,7 +82,7 @@ class CashFlow extends \Core\Model
         $stmt->bindValue(':income_category_assigned_to_user_id', $category, PDO::PARAM_STR);
         $stmt->bindValue(':amount', $amount, PDO::PARAM_STR);
         $stmt->bindValue(':date_of_income', $date, PDO::PARAM_STR);
-        $stmt->bindValue(':date_of_income_first', $date, PDO::PARAM_STR);
+        $stmt->bindValue(':date_of_income_current', $dateCurrent, PDO::PARAM_STR);
         $stmt->bindValue(':income_comment', $comment, PDO::PARAM_STR);
 
         return $stmt->execute();
@@ -100,10 +100,10 @@ class CashFlow extends \Core\Model
      *
      * @return void
      */
-    public static function addExpense($userId, $amount, $date, $payment, $category, $comment)
+    public static function addExpense($userId, $amount, $date, $dateCurrent, $payment, $category, $comment)
     {
-        $sql = 'INSERT INTO expenses (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, date_of_expense_first, expense_comment)
-        VALUES (:user_id, :expense_category_assigned_to_user_id, :payment_method_assigned_to_user_id, :amount, :date_of_expense, :date_of_expense_first, :expense_comment)';
+        $sql = 'INSERT INTO expenses (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, date_of_expense_current, expense_comment)
+        VALUES (:user_id, :expense_category_assigned_to_user_id, :payment_method_assigned_to_user_id, :amount, :date_of_expense, :date_of_expense_current, :expense_comment)';
 
         $dbConnection = static::getDB();
         $stmt = $dbConnection->prepare($sql);
@@ -113,7 +113,7 @@ class CashFlow extends \Core\Model
         $stmt->bindValue(':payment_method_assigned_to_user_id', $payment, PDO::PARAM_STR);
         $stmt->bindValue(':amount', $amount, PDO::PARAM_STR);
         $stmt->bindValue(':date_of_expense', $date, PDO::PARAM_STR);
-        $stmt->bindValue(':date_of_expense_first', $date, PDO::PARAM_STR);
+        $stmt->bindValue(':date_of_expense_current', $dateCurrent, PDO::PARAM_STR);
         $stmt->bindValue(':expense_comment', $comment, PDO::PARAM_STR);
 
         return $stmt->execute();
@@ -407,7 +407,7 @@ class CashFlow extends \Core\Model
         return  $expenseOrIncomeTableForGivenPeriod;
     }
 
-    public static function checkIfCategoryIsAssignedToUser($user_id, $name)
+    public static function checkIfExpenseCategoryIsAssignedToUser($user_id, $name)
     {
         $sql = "SELECT *
                 FROM expenses_category_assigned_to_users
@@ -422,7 +422,22 @@ class CashFlow extends \Core\Model
         return $stmt->fetch();
     }
 
-    public static function addCategory($user_id, $categoryProvidedByUser)
+    public static function checkIfIncomeCategoryIsAssignedToUser($user_id, $name)
+    {
+        $sql = "SELECT *
+                FROM incomes_category_assigned_to_users
+                WHERE user_id = :user_id AND name = :name";
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public static function addExpenseCategory($user_id, $categoryProvidedByUser)
     {
         $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name)
                 VALUES (:user_id, :name)';
@@ -438,10 +453,42 @@ class CashFlow extends \Core\Model
         return $stmt->rowCount() ? true : false;
     }
 
-    public static function countNumberOfCategories($user_id)
+    public static function addIncomeCategory($user_id, $categoryProvidedByUser)
+    {
+        $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name)
+                VALUES (:user_id, :name)';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $categoryProvidedByUser, PDO::PARAM_STR);
+                                        
+        $stmt->execute();
+        
+        return $stmt->rowCount() ? true : false;
+    }
+
+    public static function countNumberOfExpenseCategories($user_id)
     {
         $sql = 'SELECT COUNT(*)
                 FROM expenses_category_assigned_to_users
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+                                        
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_NUM);
+    }
+
+    public static function countNumberOfIncomeCategories($user_id)
+    {
+        $sql = 'SELECT COUNT(*)
+                FROM incomes_category_assigned_to_users
                 WHERE user_id = :user_id';
 
         $dbConnection = static::getDB();
@@ -470,6 +517,22 @@ class CashFlow extends \Core\Model
         return $stmt->fetch(PDO::FETCH_NUM);
     }
 
+    public static function countNumberOfCategoriesInIncomesList($user_id)
+    {
+        $sql = 'SELECT COUNT(DISTINCT income_category_assigned_to_user_id)
+                FROM incomes
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+                                        
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_NUM);
+    }
+
     public static function checkIfCategoryPresentOnExpensesList($user_id, $category)
     {
         $sql = 'SELECT COUNT(DISTINCT expense_category_assigned_to_user_id)
@@ -481,6 +544,32 @@ class CashFlow extends \Core\Model
                                                 
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':expense_category_assigned_to_user_id', $category, PDO::PARAM_STR);
+                                        
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_NUM);
+
+        if (is_array($result))
+        {
+            return (int)$result[0] ? 1 : 0;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function checkIfCategoryPresentOnIncomesList($user_id, $category)
+    {
+        $sql = 'SELECT COUNT(DISTINCT income_category_assigned_to_user_id)
+                FROM incomes
+                WHERE user_id = :user_id AND income_category_assigned_to_user_id = :income_category_assigned_to_user_id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':income_category_assigned_to_user_id', $category, PDO::PARAM_STR);
                                         
         $stmt->execute();
 
@@ -585,7 +674,7 @@ class CashFlow extends \Core\Model
         }
     }
 
-    public static function returnCategoriesAssignedToUser($user_id)
+    public static function returnExpenseCategoriesAssignedToUser($user_id)
     {
         $sql = "SELECT *
                 FROM expenses_category_assigned_to_users
@@ -599,9 +688,39 @@ class CashFlow extends \Core\Model
         return $stmt->fetchAll();
     }
 
-    public static function deleteCategory($user_id, $category)
+    public static function returnIncomeCategoriesAssignedToUser($user_id)
+    {
+        $sql = "SELECT *
+                FROM incomes_category_assigned_to_users
+                WHERE user_id = :user_id";
+
+        $dbConnection = static::getDB();
+        $stmt =  $dbConnection->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public static function deleteExpenseCategory($user_id, $category)
     {
         $sql = "DELETE FROM expenses_category_assigned_to_users 
+                WHERE user_id = :user_id AND name = :name";
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $category, PDO::PARAM_STR);
+                                        
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
+    public static function deleteIncomeCategory($user_id, $category)
+    {
+        $sql = "DELETE FROM incomes_category_assigned_to_users 
                 WHERE user_id = :user_id AND name = :name";
 
         $dbConnection = static::getDB();
@@ -666,10 +785,45 @@ class CashFlow extends \Core\Model
         return $expenseArray;
     }
 
+    public static function returnAllIncomes($user_id)
+    {
+        $sql = 'SELECT *
+                FROM incomes
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);                                
+        $stmt->execute();
+        $incomeArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($incomeArray as &$income)
+        {
+            $income['amount'] = static::formatNumberInBudget($income['amount']);
+        }
+
+        return $incomeArray;
+    }
+
     public static function returnExpensesId($user_id)
     {
         $sql = 'SELECT id
                 FROM expenses
+                WHERE user_id = :user_id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);                                
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function returnIncomesId($user_id)
+    {
+        $sql = 'SELECT id
+                FROM incomes
                 WHERE user_id = :user_id';
 
         $dbConnection = static::getDB();
@@ -706,6 +860,32 @@ class CashFlow extends \Core\Model
 
     }
 
+    public static function checkIfCurrentCategoryForIncomeItemIsTheSame($income_id, $category)
+    {
+        $sql = 'SELECT COUNT(income_category_assigned_to_user_id)
+                FROM incomes
+                WHERE id = :id AND income_category_assigned_to_user_id = :income_category_assigned_to_user_id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':income_category_assigned_to_user_id', $category, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_NUM);
+
+        if (is_array($result))
+        {
+            return (int)$result[0] ? 1 : 0;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public static function changeCategoryForExpenseItem($expense_id, $category)
     {
         $sql = 'UPDATE expenses
@@ -717,6 +897,22 @@ class CashFlow extends \Core\Model
                                                 
         $stmt->bindValue(':expense_category_assigned_to_user_id', $category, PDO::PARAM_STR);                                
         $stmt->bindValue(':id', $expense_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
+    public static function changeCategoryForIncomeItem($income_id, $category)
+    {
+        $sql = 'UPDATE incomes
+                SET income_category_assigned_to_user_id = :income_category_assigned_to_user_id
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':income_category_assigned_to_user_id', $category, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() ? true : false;
@@ -790,6 +986,32 @@ class CashFlow extends \Core\Model
 
     }
 
+    public static function checkIfCurrentAmountForIncomeItemIsTheSame($income_id, $amount)
+    {
+        $sql = 'SELECT COUNT(amount)
+                FROM incomes
+                WHERE id = :id AND amount = :amount';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':amount', $amount, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_NUM);
+
+        if (is_array($result))
+        {
+            return (int)$result[0] ? 1 : 0;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public static function changeAmountForExpenseItem($expense_id, $amount)
     {
         $sql = 'UPDATE expenses
@@ -806,6 +1028,22 @@ class CashFlow extends \Core\Model
         return $stmt->rowCount() ? true : false;
     }
 
+    public static function changeAmountForIncomeItem($income_id, $amount)
+    {
+        $sql = 'UPDATE incomes
+                SET amount = :amount
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':amount', $amount, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
     public static function returnSingleExpenseItem($expense_id)
     {
         $sql = 'SELECT *
@@ -816,6 +1054,22 @@ class CashFlow extends \Core\Model
         $stmt = $dbConnection->prepare($sql);
                                                 
         $stmt->bindValue(':id', $expense_id, PDO::PARAM_INT);   
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());                             
+        $stmt->execute();
+        
+        return $stmt->fetch();
+    }
+
+    public static function returnSingleIncomeItem($income_id)
+    {
+        $sql = 'SELECT *
+                FROM incomes
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);   
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());                             
         $stmt->execute();
         
@@ -848,6 +1102,32 @@ class CashFlow extends \Core\Model
 
     }
 
+    public static function checkIfCurrentDateForIncomeItemIsTheSame($income_id, $date)
+    {
+        $sql = 'SELECT COUNT(date_of_income)
+                FROM incomes
+                WHERE id = :id AND date_of_income = :date_of_income';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+
+        $stmt->bindValue(':date_of_income', $date, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_NUM);
+
+        if (is_array($result))
+        {
+            return (int)$result[0] ? 1 : 0;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public static function changeDateForExpenseItem($expense_id, $date)
     {
         $sql = 'UPDATE expenses
@@ -859,6 +1139,22 @@ class CashFlow extends \Core\Model
                                                 
         $stmt->bindValue(':date_of_expense', $date, PDO::PARAM_STR);                                
         $stmt->bindValue(':id', $expense_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
+    public static function changeDateForIncomeItem($income_id, $date)
+    {
+        $sql = 'UPDATE incomes
+                SET date_of_income = :date_of_income
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':date_of_income', $date, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() ? true : false;
@@ -880,6 +1176,22 @@ class CashFlow extends \Core\Model
         return $stmt->rowCount() ? true : false;
     }
 
+    public static function changeCommentForIncomeItem($income_id, $comment)
+    {
+        $sql = 'UPDATE incomes
+                SET income_comment = :income_comment
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                
+        $stmt->bindValue(':income_comment', $comment, PDO::PARAM_STR);                                
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
     public static function deleteExpenseItem($expense_id)
     {
         $sql = 'DELETE FROM expenses 
@@ -889,6 +1201,20 @@ class CashFlow extends \Core\Model
         $stmt = $dbConnection->prepare($sql);
                                                                                
         $stmt->bindValue(':id', $expense_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() ? true : false;
+    }
+
+    public static function deleteIncomeItem($income_id)
+    {
+        $sql = 'DELETE FROM incomes 
+                WHERE id = :id';
+
+        $dbConnection = static::getDB();
+        $stmt = $dbConnection->prepare($sql);
+                                                                               
+        $stmt->bindValue(':id', $income_id, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() ? true : false;

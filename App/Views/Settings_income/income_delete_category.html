@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Add payment{% endblock %}
+{% block title %}Delete category{% endblock %}
 
 {% block header %}
 
@@ -17,7 +17,7 @@
                 <li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
-                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings" aria-current="page">Settings</a></li>
+                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings-options" aria-current="page">Settings</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
             </ul>
         </div>
@@ -43,18 +43,27 @@
                 </section>
 				<header>
 					<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey p-2 mx-auto">	
-						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Add payment method<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/expense">Back</a></h2>
+						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Delete category<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/income">Back</a></h2>
 					</div>
 				</header>
 				<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey px-2 pb-2 mx-auto">	
 					<div class="underline"></div>   
-					<form class="lh-1" action="/settings/addPayment" method="post">
-                        
-                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="new-payment">Payment method</label>
-                            <input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="new-payment" id="new-payment" title="Please fill out this field" aria-label="New payment method to be added for expense" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
-                            
+					<form class="lh-1" action="/settings/deleteIncomeCategory" method="post">
+                        <div class="text-center mt-2">
+                            {% if categories is not empty %}
+                            <label  class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1 me-2" for="data-to-be-changed">Category</label>  
+                            <select class="form-select form-select-sm w-auto d-inline-block fw-bold font-color-grey text-center" id="data-to-be-changed" name="category" aria-label="Category options available for deletion">
+                                <option value="--" selected>--</option>
+                                {% for category in categories %}																				
+                                <option value= {{ category.name | json_encode | raw }}>{{ category.name }}</option>
+                                {% endfor %}										
+                            </select>
+                            {% else %}
+                            <p class="font-orange mb-0 mt-3" id="no-categories">No categories available</p>
+                            {% endif %}
+                        </div>
                         <div class="d-grid mt-4">
-							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Add payment method button">Add</button>
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Delete category button" disabled>Delete</button>
 						</div>			
 					</form>
 				</div>	
@@ -68,5 +77,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="/js/settingsFunctionality.js"></script>
+    <script src="/js/settingsButtonActivation.js"></script>
+ <!--   <script src="/js/settingsButtonDeactivation.js"></script>  -->
 
 {% endblock %}	

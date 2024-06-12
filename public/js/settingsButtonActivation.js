@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    //submit button active if both expense number and category provided
+    //submit button active if both expense/income number and category provided
     
     $("select, input").on('input', function(e) {
         var isButtonDisabled = $('#data-change-button').is(":disabled");

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Change date{% endblock %}
+{% block title %}Change comment{% endblock %}
 
 {% block header %}
 
@@ -17,7 +17,7 @@
                 <li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
-                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings" aria-current="page">Settings</a></li>
+                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings-options" aria-current="page">Settings</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
             </ul>
         </div>
@@ -39,22 +39,23 @@
                             <p class="text-center {{ message.type }} w-100 m-0" id="text-message-paragraph">{{ message.body }}</p>
                         {% endfor %}
                     {% endif %}
+                            <p class="text-center font-orange w-100 m-0" id="validation-message-jquery"></p>
                     </div>
                 </section>
 				<header>
 					<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey p-2 mx-auto" id="header-div">	
-						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Change date<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/expense">Back</a></h2>
+						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Change comment<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/income">Back</a></h2>
 					</div>
 				</header>
 				<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey px-2 pb-2 mx-auto" id="data-for-form">	
 					<div class="underline"></div>   
-					<form class="lh-1" action="/settings/changeDateForExpenseItem" method="post">
+					<form class="lh-1" action="/settings/changeCommentForIncomeItem" method="post">
                         <div class="mt-2">
                             {% if ids > 0 %}
                             <div class="row mb-2 position-relative">
-                                <label  class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label lh-1 label-alignment" for="expense-income-number">Expense number</label>  
+                                <label  class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label lh-1 label-alignment" for="expense-income-number">Income number</label>  
                                 <div class="col-8">
-                                    <select class="form-select form-select-sm w-auto fw-bold font-color-grey text-center position-absolute-select" id="expense-income-number" name="expenseNumber" size="1" aria-label="List of expense numbers registered by user">
+                                    <select class="form-select form-select-sm w-auto fw-bold font-color-grey text-center position-absolute-select" id="expense-income-number" name="incomeNumber" size="1" aria-label="List of income numbers registered by user">
                                         {% if selected is empty %}
                                         <option value="--" class="text-center" selected>--</option>
                                         {% else %}
@@ -73,21 +74,21 @@
                             <div class="row align-items-center">
         <!--                    <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="amount">Amount</label>
 								<input class="form-control form-control-sm fw-bold font-color-grey text-center ps-4" type="number" name="amount" id="amount" step="0.01" title="Please fill out this field" aria-label="Expense expressed in the number as your cost" />	  -->
-                        <!--        <label class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label" for="data-to-be-changed">Amount</label>
-                                <div class="col-6">
-                                    <input class="form-control form-control-sm fw-bold font-color-grey text-center ps-4" type="number" name="amount" id="data-to-be-changed" step="0.01" title="Please fill out this field" aria-label="Expense modification expressed in the number as your cost" />
-                                </div>   -->
-                                <label class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label" for="data-to-be-changed">Date</label>
-                                <div class="col-5">
-                                    <input class="form-control form-control-sm fw-bold font-color-grey text-center" type="date" name="date" id="data-to-be-changed" title="Please fill out this field" aria-label="Date modification of your expense registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" disabled />
+                                <label class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label pb-0" for="data-to-be-changed-comment">Comment (optional)</label>
+                                <div class="col-8 mt-1">
+                                    {% if comment is empty %}
+                                    <input class="form-control form-control-sm fw-bold font-color-grey text-center pb-0 pt-0" type="text" name="comment" id="data-to-be-changed-comment" title="Optional comment" aria-label="Comment modification for income item" />
+                                    {% else %}
+                                    <input class="form-control form-control-sm fw-bold font-color-grey text-center pb-0 pt-0" type="text" name="comment" id="data-to-be-changed-comment" value={{ comment | json_encode | raw }} title="Optional comment" aria-label="Comment modification for income item" />
+                                    {% endif %}
                                 </div>
                             </div>
                             {% else %}
-                            <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No expense items available</p>
+                            <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No income items available</p>
                             {% endif %}
                         </div>   
                         <div class="d-grid mt-4">
-							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Button to change date for expense item" disabled>Change</button>
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Button to change comment for income item" disabled>Change</button>
 						</div>			
 					</form>
 				</div>	
@@ -101,9 +102,9 @@
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="/js/settingsFunctionality.js"></script>
-    <script src="/js/settingsButtonActivation.js"></script>              
+    <script src="/js/settingsButtonActivationComment.js"></script>   
     <script src="/js/settingsIdDropDownList.js"></script>
-    <script src="/js/settingsRestrictionForDate.js"></script>
-    <script src="/js/settingsShowDate.js"></script>
-    
+    <script src="/js/settingsRestrictionForComment.js"></script>
+ <!--   <script src="/js/settingsRestrictionForAmount.js"></script>    -->   
+
 {% endblock %}	

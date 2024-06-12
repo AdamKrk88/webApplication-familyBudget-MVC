@@ -58,6 +58,7 @@ class Ajax extends \Core\Controller
     {
         $_SESSION['amount'] = Validation::testInput($_POST['amount']);
         $_SESSION['date'] = Validation::testInput($_POST['date']);
+        $_SESSION['currentDate'] = Validation::testInput($_POST['currentDate']);
 
         if (isset($_POST['payment']))
         {
@@ -81,11 +82,11 @@ class Ajax extends \Core\Controller
         {
             if (isset($_SESSION['payment'])) 
             {
-                $isAdded = CashFlow::addExpense($_SESSION['user_id'], $_SESSION['amount'], $_SESSION['date'], $_SESSION['payment'], $_SESSION['category'], $_SESSION['comment']);
+                $isAdded = CashFlow::addExpense($_SESSION['user_id'], $_SESSION['amount'], $_SESSION['date'], $_SESSION['currentDate'], $_SESSION['payment'], $_SESSION['category'], $_SESSION['comment']);
             }
             else 
             {
-                $isAdded = CashFlow::addIncome($_SESSION['user_id'], $_SESSION['amount'], $_SESSION['date'],  $_SESSION['category'], $_SESSION['comment']);
+                $isAdded = CashFlow::addIncome($_SESSION['user_id'], $_SESSION['amount'], $_SESSION['date'],  $_SESSION['currentDate'], $_SESSION['category'], $_SESSION['comment']);
             }
 
             if (!$isAdded) 
@@ -103,6 +104,7 @@ class Ajax extends \Core\Controller
         unset($_SESSION['date']);
         unset($_SESSION['category']);
         unset($_SESSION['comment']);
+        unset($_SESSION['currentDate']);
 
         if (isset($_SESSION['payment'])) 
         {
@@ -324,7 +326,36 @@ class Ajax extends \Core\Controller
                     $expenseId = (int)$expenseId;
                     $singleExpense = CashFlow::returnSingleExpenseItem($expenseId);
                     $dateFromDatabase['date_of_expense'] = $singleExpense->date_of_expense; 
-                    $dateFromDatabase['date_of_expense_first'] = $singleExpense->date_of_expense_first; 
+                    $dateFromDatabase['date_of_expense_current'] = $singleExpense->date_of_expense_current; 
+                }
+            }
+        }
+
+        echo json_encode($dateFromDatabase); 
+    
+    }
+
+    public function getDateFromDatabaseForIncomeItemAction() 
+    {
+        $dateFromDatabase = [];
+
+        if ($_POST['expenseIncomeNumber']) 
+        {
+            $incomeNumber = $_POST['expenseIncomeNumber'];
+         //   $valueNotAllowed = array("--","0.", "0.0", "0.00");
+            $isMatched = preg_match("/^[1-9]+\d*$/",$incomeNumber) ? true : false;
+            
+            if ($isMatched)
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+
+                if (is_array($incomeIdArray) && !empty($incomeIdArray))
+                {
+                    $incomeId = $incomeIdArray[(int)$incomeNumber - 1]['id'];
+                    $incomeId = (int)$incomeId;
+                    $singleIncome = CashFlow::returnSingleIncomeItem($incomeId);
+                    $dateFromDatabase['date_of_income'] = $singleIncome->date_of_income; 
+                    $dateFromDatabase['date_of_income_current'] = $singleIncome->date_of_income_current; 
                 }
             }
         }

@@ -11,13 +11,16 @@ $(document).ready(function() {
     var currentDay = dateObject.getDate();
 
     var maxDate = dateObject.getFullYear() + '-' +
-    (month<10 ? '0' : '') + month + '-' + currentDay;
+    (month<10 ? '0' : '') + month + '-' + (currentDay<10 ? '0' : '') + currentDay;
 
     //restriction for amount and date fields
     amountInput.attr('min','0.01');
     amountInput.attr('max','1000000000');
     dateInput.attr('min','2023-01-01');
     dateInput.attr('max', maxDate);
+
+    //set default date as current day
+    dateInput.val(maxDate);
     
     //submit button disabled if expense categories or payment method not available 
     if ($('#no-categories').length > 0 || $('#no-payment-option').length > 0) {
@@ -99,7 +102,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "/ajax/processFirstForm",
-                data: $('#firstForm').serialize()+"&ajax="+true,
+                data: $('#firstForm').serialize()+"&ajax="+true+"&currentDate="+maxDate,
             }).done(function() {
                 $.ajax({
                     type: "POST",

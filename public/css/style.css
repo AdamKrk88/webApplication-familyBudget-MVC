@@ -481,8 +481,8 @@ div.categorySelection:nth-last-child(4)
 	box-shadow: 0px 0px 4px 1px rgba(255, 0, 0, 0.54);
 }
 
-#link-expense-table:hover,
-#link-expense-table:focus
+#link-expense-income-table:hover,
+#link-expense-income-table:focus
 {
 	background-color: #ffcc99;
 	-webkit-box-shadow: 0px 0px 4px 1px rgba(243, 116, 6, 1);

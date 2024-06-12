@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Change category{% endblock %}
+{% block title %}Change payment method{% endblock %}
 
 {% block header %}
 
@@ -17,7 +17,7 @@
                 <li class="nav-item text-center"><a class="nav-link" href="/income/display-income-form">Add income</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/expense/display-expense-form">Add expense</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/balance/display-balance-review">Review balance</a></li>
-                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings" aria-current="page">Settings</a></li>
+                <li class="nav-item text-center"><a class="nav-link active" href="/settings/display-settings-options" aria-current="page">Settings</a></li>
                 <li class="nav-item text-center"><a class="nav-link" href="/logout">Log out</a></li>
             </ul>
         </div>
@@ -36,7 +36,6 @@
                     <div class="col-lg-5 col-md-7 col-sm-8 position-absolute start-50 bottom-0 translate-middle-x mx-auto">
                     {% if flash_messages is not empty %}
                         {% for message in flash_messages %}
-           <!--             <p class="text-center {{ message.type }} position-absolute start-50 bottom-0 translate-middle-x w-100 m-0" id="text-message-paragraph">{{ message.body }}</p>     -->
                             <p class="text-center {{ message.type }} w-100 m-0" id="text-message-paragraph">{{ message.body }}</p>
                         {% endfor %}
                     {% endif %}
@@ -44,15 +43,15 @@
                 </section>
 				<header>
 					<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey p-2 mx-auto" id="header-div">	
-						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Change category<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/expense">Back</a></h2>
+						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Change payment method<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/settings/display-settings/expense">Back</a></h2>
 					</div>
 				</header>
 				<div class="col-lg-5 col-md-7 col-sm-8 bg-light-grey px-2 pb-2 mx-auto" id="data-for-form">	
 					<div class="underline"></div>   
-					<form class="lh-1" action="/settings/changeCategoryForExpenseItem" method="post">
+					<form class="lh-1" action="/settings/changePaymentForExpenseItem" method="post">
                         <div class="mt-2">
-                            {% set isCategoriesEmpty = categories is empty %}
-                            {% if (not isCategoriesEmpty) and ids > 0 %}
+                            {% set isPaymentsEmpty = payments is empty %}
+                            {% if (not isPaymentsEmpty) and ids > 0 %}
                             <div class="row mb-2 position-relative">
                                 <label  class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label lh-1 label-alignment" for="expense-income-number">Expense number</label>  
                                 <div class="col-8">
@@ -73,26 +72,26 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <label  class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label" for="data-to-be-changed">Category</label>  
+                                <label  class="col-4 font-color-grey font-size-scaled-from-15px fw-bolder col-form-label" for="data-to-be-changed">Payment method</label>  
                                 <div class="col-8">
-                                    <select class="form-select form-select-sm w-auto fw-bold font-color-grey text-center" id="data-to-be-changed" name="category" aria-label="Category options available for the user">
+                                    <select class="form-select form-select-sm w-auto fw-bold font-color-grey text-center" id="data-to-be-changed" name="payment" aria-label="Payment methods available for the user">
                                         <option value="--" class="text-center" selected>--</option>
-                                        {% for category in categories %}																				
-                                        <option value= {{ category.name | json_encode | raw }} class="text-center">{{ category.name }}</option>
+                                        {% for payment in payments %}																				
+                                        <option value= {{ payment.name | json_encode | raw }} class="text-center">{{ payment.name }}</option>
                                         {% endfor %}										
                                     </select>
                                 </div>
                             </div>
-                            {% elseif (isCategoriesEmpty) and ids == 0 %}
-                            <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No categories and expense items available</p>
-                            {% elseif isCategoriesEmpty %}
-                            <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No categories available</p>
+                            {% elseif (isPaymentsEmpty) and ids == 0 %}
+                            <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No payment methods and expense items available</p>
+                            {% elseif isPaymentsEmpty %}
+                            <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No payment methods available</p>
                             {% else %}
                             <p class="font-orange text-center mb-0 mt-3" id="no-modifications">No expense items available</p>
                             {% endif %}
                         </div>   
                         <div class="d-grid mt-4">
-							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Button to change category for expense item" disabled>Change</button>
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Button to change payment method for expense item" disabled>Change</button>
 						</div>			
 					</form>
 				</div>	

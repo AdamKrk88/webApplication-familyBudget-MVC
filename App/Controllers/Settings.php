@@ -16,9 +16,23 @@ use \App\Models\CashFlow;
 class Settings extends \Core\Controller
 {
 
-    private function addCategoryToDatabaseDirectly($categoryProvidedByUser)
+    private function addExpenseCategoryToDatabaseDirectly($categoryProvidedByUser)
     {
-        $isAdded = CashFlow::addCategory($_SESSION['user_id'], $categoryProvidedByUser);
+        $isAdded = CashFlow::addExpenseCategory($_SESSION['user_id'], $categoryProvidedByUser);
+                        
+        if ($isAdded)
+        {
+            Flash::addMessage('Category ' . '\'' . $categoryProvidedByUser . '\'' . ' added', Flash::ORANGE);
+        }
+        else
+        {
+            Flash::addMessage('Database error', Flash::ORANGE);
+        }
+    }
+
+    private function addIncomeCategoryToDatabaseDirectly($categoryProvidedByUser)
+    {
+        $isAdded = CashFlow::addIncomeCategory($_SESSION['user_id'], $categoryProvidedByUser);
                         
         if ($isAdded)
         {
@@ -44,7 +58,8 @@ class Settings extends \Core\Controller
         }
     }
 
-    public function displaySettingsAction()
+
+    public function displaySettingsOptionsAction()
     {   
         if (isset($this->route_params['option'])) 
         {
@@ -52,23 +67,41 @@ class Settings extends \Core\Controller
 
             if ($option === 'user')
             {
-                View::renderTemplate('Settings/user.html');
+                View::renderTemplate('Settings_user/user.html');
             }
             elseif ($option === 'expense')
             {
-                View::renderTemplate('Settings/expense.html');
+                View::renderTemplate('Settings_expense/expense.html');
             }
-            elseif ($option === 'change-name')
+            elseif ($option === 'income')
             {
-                View::renderTemplate('Settings/user_change_name.html');
+                View::renderTemplate('Settings_income/income.html');
+            }
+        }
+        else
+        {
+            View::renderTemplate('Settings/options.html');  
+        }  
+    }
+
+
+    public function displaySettingsUserAction()
+    {   
+        if (isset($this->route_params['option'])) 
+        {
+            $option = $this->route_params['option'];
+
+            if ($option === 'change-name')
+            {
+                View::renderTemplate('Settings_user/user_change_name.html');
             }
             elseif ($option === 'change-email')
             {
-                View::renderTemplate('Settings/user_change_email.html');
+                View::renderTemplate('Settings_user/user_change_email.html');
             }
             elseif ($option === 'change-password')
             {
-                View::renderTemplate('Settings/user_change_password.html');
+                View::renderTemplate('Settings_user/user_change_password.html');
             }
             elseif ($option === 'profile')
             {
@@ -76,42 +109,55 @@ class Settings extends \Core\Controller
 
                 if ($user)
                 {
-                    View::renderTemplate('Settings/user_profile.html', [
+                    View::renderTemplate('Settings_user/user_profile.html', [
                         'username' => $user->username,
                         'email' => $user->email  
                     ]);
                 }
                 else
                 {
-                    View::renderTemplate('Settings/user_profile.html');
+                    View::renderTemplate('Settings_user/user_profile.html');
                 }
             }
-            elseif ($option === 'add-category')
+        }
+        else
+        {
+            View::renderTemplate('Settings/options.html');  
+        }  
+    }
+
+    public function displaySettingsExpenseAction()
+    {   
+        if (isset($this->route_params['option'])) 
+        {
+            $option = $this->route_params['option'];
+
+            if ($option === 'add-category')
             {
-                View::renderTemplate('Settings/expense_add_category.html');
+                View::renderTemplate('Settings_expense/expense_add_category.html');
             }
             elseif ($option === 'add-payment')
             {
-                View::renderTemplate('Settings/expense_add_payment.html');
+                View::renderTemplate('Settings_expense/expense_add_payment.html');
             }
             elseif ($option === 'delete-category')
             {
-                $expensesCategories = CashFlow::returnCategoriesAssignedToUser($_SESSION['user_id']);
+                $expensesCategories = CashFlow::returnExpenseCategoriesAssignedToUser($_SESSION['user_id']);
 
                 if (!empty($expensesCategories))
                 {
-                    View::renderTemplate('Settings/expense_delete_category.html', [
+                    View::renderTemplate('Settings_expense/expense_delete_category.html', [
                         'categories' => $expensesCategories
                     ]);
                 }
                 elseif (is_array($expensesCategories))
                 {
-                    View::renderTemplate('Settings/expense_delete_category.html');
+                    View::renderTemplate('Settings_expense/expense_delete_category.html');
                 }
                 else
                 {
                     Flash::addMessage('Database error', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_delete_category.html');
+                    View::renderTemplate('Settings_expense/expense_delete_category.html');
                 }
             }
             elseif ($option === 'delete-payment')
@@ -120,44 +166,44 @@ class Settings extends \Core\Controller
 
                 if (!empty($expensesPayments))
                 {
-                    View::renderTemplate('Settings/expense_delete_payment.html', [
+                    View::renderTemplate('Settings_expense/expense_delete_payment.html', [
                         'payments' => $expensesPayments
                     ]);
                 }
                 elseif (is_array($expensesPayments))
                 {
-                    View::renderTemplate('Settings/expense_delete_payment.html');
+                    View::renderTemplate('Settings_expense/expense_delete_payment.html');
                 }
                 else
                 {
                     Flash::addMessage('Database error', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_delete_payment.html');
+                    View::renderTemplate('Settings_expense/expense_delete_payment.html');
                 }
             }
             elseif ($option === 'expense-list')
             {
                 $expenseArray = CashFlow::returnAllExpenses($_SESSION['user_id']);
-           //     $expenseArray = false;
+        
                 if (!empty($expenseArray))
                 {
-                    View::renderTemplate('Settings/expense_list.html', [
+                    View::renderTemplate('Settings_expense/expense_list.html', [
                         'expenses' => $expenseArray
                     ]);
                 }
                 elseif (is_array($expenseArray))
                 {
-                    View::renderTemplate('Settings/expense_list.html');
+                    View::renderTemplate('Settings_expense/expense_list.html');
                 }
                 else
                 {
                     Flash::addMessage('Database error', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_list.html');
+                    View::renderTemplate('Settings_expense/expense_list.html');
                 }
             }
             elseif ($option === 'change-category')
             {
                 $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
-                $expensesCategories = CashFlow::returnCategoriesAssignedToUser($_SESSION['user_id']);
+                $expensesCategories = CashFlow::returnExpenseCategoriesAssignedToUser($_SESSION['user_id']);
                 $expesneIdArrayLength = count($expenseIdArray);
                 $selected = 0;
                 $expenseNumber = 0;
@@ -167,7 +213,7 @@ class Settings extends \Core\Controller
                     $expenseNumber = (int)$_SESSION['expenseNumber'];
                     unset($_SESSION['expenseNumber']);
                 }
-            //    $expensesCategories = false;
+        
                 if (is_array($expensesCategories) && is_array($expenseIdArray))
                 {
                
@@ -178,7 +224,7 @@ class Settings extends \Core\Controller
                   //      unset($_SESSION['expenseNumber']);
                     }
 
-                    View::renderTemplate('Settings/expense_change_category.html', [
+                    View::renderTemplate('Settings_expense/expense_change_category.html', [
                         'ids' => $expesneIdArrayLength,
                         'categories' => $expensesCategories,
                         'selected' => $selected
@@ -187,7 +233,7 @@ class Settings extends \Core\Controller
                 else
                 {
                     Flash::addMessage('Database error - expense numbers and categories not generated', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_change_category.html');
+                    View::renderTemplate('Settings_expense/expense_change_category.html');
                 }
             }
             elseif ($option === 'change-payment')
@@ -212,7 +258,7 @@ class Settings extends \Core\Controller
                         $selected = $expenseNumber;
                     }
 
-                    View::renderTemplate('Settings/expense_change_payment.html', [
+                    View::renderTemplate('Settings_expense/expense_change_payment.html', [
                         'ids' => $expesneIdArrayLength,
                         'payments' => $expensesPayments,
                         'selected' => $selected
@@ -221,7 +267,7 @@ class Settings extends \Core\Controller
                 else
                 {
                     Flash::addMessage('Database error - expense numbers and payments methods not generated', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_change_payment.html');
+                    View::renderTemplate('Settings_expense/expense_change_payment.html');
                 } 
             }
             elseif ($option === 'change-amount')
@@ -245,7 +291,7 @@ class Settings extends \Core\Controller
                         $selected = $expenseNumber;
                     }
 
-                    View::renderTemplate('Settings/expense_change_amount.html', [
+                    View::renderTemplate('Settings_expense/expense_change_amount.html', [
                         'ids' => $expesneIdArrayLength,
                         'selected' => $selected
                     ]);
@@ -253,7 +299,7 @@ class Settings extends \Core\Controller
                 else
                 {
                     Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_change_amount.html');
+                    View::renderTemplate('Settings_expense/expense_change_amount.html');
                 }
 
             }
@@ -277,7 +323,7 @@ class Settings extends \Core\Controller
                         $selected = $expenseNumber;
                     }
 
-                    View::renderTemplate('Settings/expense_change_date.html', [
+                    View::renderTemplate('Settings_expense/expense_change_date.html', [
                         'ids' => $expesneIdArrayLength,
                         'selected' => $selected
                     ]);
@@ -285,7 +331,7 @@ class Settings extends \Core\Controller
                 else
                 {
                     Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_change_date.html');
+                    View::renderTemplate('Settings_expense/expense_change_date.html');
                 }
             }
             elseif ($option === 'change-comment')
@@ -321,7 +367,7 @@ class Settings extends \Core\Controller
                         $commentValue = $comment;
                     }
 
-                    View::renderTemplate('Settings/expense_change_comment.html', [
+                    View::renderTemplate('Settings_expense/expense_change_comment.html', [
                         'ids' => $expesneIdArrayLength,
                         'selected' => $selected,
                         'comment' => $commentValue
@@ -330,7 +376,7 @@ class Settings extends \Core\Controller
                 else
                 {
                     Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_change_comment.html');
+                    View::renderTemplate('Settings_expense/expense_change_comment.html');
                 }
             }
             elseif ($option === 'delete-item')
@@ -341,14 +387,14 @@ class Settings extends \Core\Controller
                 if (is_array($expenseIdArray))
                 {
 
-                    View::renderTemplate('Settings/expense_delete_item.html', [
+                    View::renderTemplate('Settings_expense/expense_delete_item.html', [
                         'ids' => $expesneIdArrayLength
                     ]);
                 }
                 else
                 {
                     Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
-                    View::renderTemplate('Settings/expense_delete_item.html');
+                    View::renderTemplate('Settings_expense/expense_delete_item.html');
                 }
             }
         }
@@ -357,6 +403,558 @@ class Settings extends \Core\Controller
             View::renderTemplate('Settings/options.html');  
         }  
     }
+
+
+    public function displaySettingsIncomeAction()
+    {   
+        if (isset($this->route_params['option'])) 
+        {
+            $option = $this->route_params['option'];
+
+            if ($option === 'add-category')
+            {
+                View::renderTemplate('Settings_income/income_add_category.html');
+            }
+            elseif ($option === 'delete-category')
+            {
+                $incomesCategories = CashFlow::returnIncomeCategoriesAssignedToUser($_SESSION['user_id']);
+
+                if (!empty($incomesCategories))
+                {
+                    View::renderTemplate('Settings_income/income_delete_category.html', [
+                        'categories' => $incomesCategories
+                    ]);
+                }
+                elseif (is_array($incomesCategories))
+                {
+                    View::renderTemplate('Settings_income/income_delete_category.html');
+                }
+                else
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_delete_category.html');
+                }
+            }
+            elseif ($option === 'income-list')
+            {
+                $incomeArray = CashFlow::returnAllIncomes($_SESSION['user_id']);
+        
+                if (!empty($incomeArray))
+                {
+                    View::renderTemplate('Settings_income/income_list.html', [
+                        'incomes' => $incomeArray
+                    ]);
+                }
+                elseif (is_array($incomeArray))
+                {
+                    View::renderTemplate('Settings_income/income_list.html');
+                }
+                else
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_list.html');
+                }
+            }
+            elseif ($option === 'change-category')
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                $incomesCategories = CashFlow::returnIncomeCategoriesAssignedToUser($_SESSION['user_id']);
+                $incomeIdArrayLength = count($incomeIdArray);
+                $selected = 0;
+                $incomeNumber = 0;
+
+                if (isset($_SESSION['incomeNumber']))
+                {
+                    $incomeNumber = (int)$_SESSION['incomeNumber'];
+                    unset($_SESSION['incomeNumber']);
+                }
+        
+                if (is_array($incomesCategories) && is_array($incomeIdArray))
+                {
+               
+                    if (!empty($_SESSION['flash_notifications']) &&  $incomeNumber > 0)
+                    {
+                    //    $expenseNumber = $_SESSION['expenseNumber'];
+                        $selected =  $incomeNumber;
+                  //      unset($_SESSION['expenseNumber']);
+                    }
+
+                    View::renderTemplate('Settings_income/income_change_category.html', [
+                        'ids' => $incomeIdArrayLength,
+                        'categories' => $incomesCategories,
+                        'selected' => $selected
+                    ]); 
+                }
+                else
+                {
+                    Flash::addMessage('Database error - income numbers and categories not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_change_category.html');
+                }
+            }
+            elseif ($option === 'change-amount')
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                $incomeIdArrayLength = count($incomeIdArray);
+                $selected = 0;
+                $incomeNumber = 0;
+
+                if (isset($_SESSION['incomeNumber']))
+                {
+                    $incomeNumber = (int)$_SESSION['incomeNumber'];
+                    unset($_SESSION['incomeNumber']);
+                }
+
+                if (is_array($incomeIdArray))
+                {
+
+                    if (!empty($_SESSION['flash_notifications']) && $incomeNumber > 0)
+                    {
+                        $selected = $incomeNumber;
+                    }
+
+                    View::renderTemplate('Settings_income/income_change_amount.html', [
+                        'ids' => $incomeIdArrayLength,
+                        'selected' => $selected
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - income numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_change_amount.html');
+                }
+
+            }
+            elseif ($option === 'change-date')
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                $incomeIdArrayLength = count($incomeIdArray);
+                $selected = 0;
+                $incomeNumber = 0;
+
+                if (isset($_SESSION['incomeNumber']))
+                {
+                    $incomeNumber = (int)$_SESSION['incomeNumber'];
+                    unset($_SESSION['incomeNumber']);
+                }
+
+                if (is_array($incomeIdArray))
+                {
+                    if (!empty($_SESSION['flash_notifications']) && $incomeNumber > 0)
+                    {
+                        $selected = $incomeNumber;
+                    }
+
+                    View::renderTemplate('Settings_income/income_change_date.html', [
+                        'ids' => $incomeIdArrayLength,
+                        'selected' => $selected
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - income numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_change_date.html');
+                }
+            }
+            elseif ($option === 'change-comment')
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                $incomeIdArrayLength = count($incomeIdArray);
+                $selected = 0;
+                $incomeNumber = 0;
+                $comment = "";
+                $commentValue = "";
+
+                if (isset($_SESSION['incomeNumber']))
+                {
+                    $incomeNumber = (int)$_SESSION['incomeNumber'];
+                    unset($_SESSION['incomeNumber']);
+                }
+
+                if (isset($_SESSION['comment']))
+                {
+                    $comment = $_SESSION['comment'];
+                    unset($_SESSION['comment']);
+                }
+
+                if (is_array($incomeIdArray))
+                {
+                    if (!empty($_SESSION['flash_notifications']) && $incomeNumber > 0)
+                    {
+                        $selected = $incomeNumber;
+                    }
+
+                    if (!empty($_SESSION['flash_notifications']) && is_string($comment) && $comment !== "" && strlen($comment) > 0)
+                    {
+                        $commentValue = $comment;
+                    }
+
+                    View::renderTemplate('Settings_income/income_change_comment.html', [
+                        'ids' => $incomeIdArrayLength,
+                        'selected' => $selected,
+                        'comment' => $commentValue
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - income numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_change_comment.html');
+                }
+            }
+            elseif ($option === 'delete-item')
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                $incomeIdArrayLength = count($incomeIdArray);
+
+                if (is_array($incomeIdArray))
+                {
+
+                    View::renderTemplate('Settings_income/income_delete_item.html', [
+                        'ids' => $incomeIdArrayLength
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - income numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_income/income_delete_item.html');
+                }
+            }
+        }
+        else
+        {
+            View::renderTemplate('Settings/options.html');  
+        }  
+    }
+
+
+
+
+
+
+
+
+
+
+/*
+
+    public function displaySettingsAction()
+    {   
+        if (isset($this->route_params['option'])) 
+        {
+            $option = $this->route_params['option'];
+
+            if ($option === 'user')
+            {
+                View::renderTemplate('Settings_user/user.html');
+            }
+            elseif ($option === 'expense')
+            {
+                View::renderTemplate('Settings_expense/expense.html');
+            }
+            elseif ($option === 'income')
+            {
+                View::renderTemplate('Settings_income/income.html');
+            }
+            elseif ($option === 'change-name')
+            {
+                View::renderTemplate('Settings_user/user_change_name.html');
+            }
+            elseif ($option === 'change-email')
+            {
+                View::renderTemplate('Settings_user/user_change_email.html');
+            }
+            elseif ($option === 'change-password')
+            {
+                View::renderTemplate('Settings_user/user_change_password.html');
+            }
+            elseif ($option === 'profile')
+            {
+                $user = User::checkIfUserIdExistInDatabase($_SESSION['user_id']);
+
+                if ($user)
+                {
+                    View::renderTemplate('Settings_user/user_profile.html', [
+                        'username' => $user->username,
+                        'email' => $user->email  
+                    ]);
+                }
+                else
+                {
+                    View::renderTemplate('Settings_user/user_profile.html');
+                }
+            }
+            elseif ($option === 'add-category')
+            {
+                View::renderTemplate('Settings_expense/expense_add_category.html');
+            }
+            elseif ($option === 'add-payment')
+            {
+                View::renderTemplate('Settings_expense/expense_add_payment.html');
+            }
+            elseif ($option === 'delete-category')
+            {
+                $expensesCategories = CashFlow::returnCategoriesAssignedToUser($_SESSION['user_id']);
+
+                if (!empty($expensesCategories))
+                {
+                    View::renderTemplate('Settings_expense/expense_delete_category.html', [
+                        'categories' => $expensesCategories
+                    ]);
+                }
+                elseif (is_array($expensesCategories))
+                {
+                    View::renderTemplate('Settings_expense/expense_delete_category.html');
+                }
+                else
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_delete_category.html');
+                }
+            }
+            elseif ($option === 'delete-payment')
+            {
+                $expensesPayments = CashFlow::returnPaymentsAssignedToUser($_SESSION['user_id']);
+
+                if (!empty($expensesPayments))
+                {
+                    View::renderTemplate('Settings_expense/expense_delete_payment.html', [
+                        'payments' => $expensesPayments
+                    ]);
+                }
+                elseif (is_array($expensesPayments))
+                {
+                    View::renderTemplate('Settings_expense/expense_delete_payment.html');
+                }
+                else
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_delete_payment.html');
+                }
+            }
+            elseif ($option === 'expense-list')
+            {
+                $expenseArray = CashFlow::returnAllExpenses($_SESSION['user_id']);
+           //     $expenseArray = false;
+                if (!empty($expenseArray))
+                {
+                    View::renderTemplate('Settings_expense/expense_list.html', [
+                        'expenses' => $expenseArray
+                    ]);
+                }
+                elseif (is_array($expenseArray))
+                {
+                    View::renderTemplate('Settings_expense/expense_list.html');
+                }
+                else
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_list.html');
+                }
+            }
+            elseif ($option === 'change-category')
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+                $expensesCategories = CashFlow::returnCategoriesAssignedToUser($_SESSION['user_id']);
+                $expesneIdArrayLength = count($expenseIdArray);
+                $selected = 0;
+                $expenseNumber = 0;
+
+                if (isset($_SESSION['expenseNumber']))
+                {
+                    $expenseNumber = (int)$_SESSION['expenseNumber'];
+                    unset($_SESSION['expenseNumber']);
+                }
+            //    $expensesCategories = false;
+                if (is_array($expensesCategories) && is_array($expenseIdArray))
+                {
+               
+                    if (!empty($_SESSION['flash_notifications']) && $expenseNumber > 0)
+                    {
+                    //    $expenseNumber = $_SESSION['expenseNumber'];
+                        $selected = $expenseNumber;
+                  //      unset($_SESSION['expenseNumber']);
+                    }
+
+                    View::renderTemplate('Settings_expense/expense_change_category.html', [
+                        'ids' => $expesneIdArrayLength,
+                        'categories' => $expensesCategories,
+                        'selected' => $selected
+                    ]); 
+                }
+                else
+                {
+                    Flash::addMessage('Database error - expense numbers and categories not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_change_category.html');
+                }
+            }
+            elseif ($option === 'change-payment')
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+                $expensesPayments = CashFlow::returnPaymentsAssignedToUser($_SESSION['user_id']);
+                $expesneIdArrayLength = count($expenseIdArray);
+                $selected = 0;
+                $expenseNumber = 0;
+
+                if (isset($_SESSION['expenseNumber']))
+                {
+                    $expenseNumber = (int)$_SESSION['expenseNumber'];
+                    unset($_SESSION['expenseNumber']);
+                }
+        
+                if (is_array($expensesPayments) && is_array($expenseIdArray))
+                {
+               
+                    if (!empty($_SESSION['flash_notifications']) && $expenseNumber > 0)
+                    {
+                        $selected = $expenseNumber;
+                    }
+
+                    View::renderTemplate('Settings_expense/expense_change_payment.html', [
+                        'ids' => $expesneIdArrayLength,
+                        'payments' => $expensesPayments,
+                        'selected' => $selected
+                    ]); 
+                }
+                else
+                {
+                    Flash::addMessage('Database error - expense numbers and payments methods not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_change_payment.html');
+                } 
+            }
+            elseif ($option === 'change-amount')
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+                $expesneIdArrayLength = count($expenseIdArray);
+                $selected = 0;
+                $expenseNumber = 0;
+
+                if (isset($_SESSION['expenseNumber']))
+                {
+                    $expenseNumber = (int)$_SESSION['expenseNumber'];
+                    unset($_SESSION['expenseNumber']);
+                }
+
+                if (is_array($expenseIdArray))
+                {
+
+                    if (!empty($_SESSION['flash_notifications']) && $expenseNumber > 0)
+                    {
+                        $selected = $expenseNumber;
+                    }
+
+                    View::renderTemplate('Settings_expense/expense_change_amount.html', [
+                        'ids' => $expesneIdArrayLength,
+                        'selected' => $selected
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_change_amount.html');
+                }
+
+            }
+            elseif ($option === 'change-date')
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+                $expesneIdArrayLength = count($expenseIdArray);
+                $selected = 0;
+                $expenseNumber = 0;
+
+                if (isset($_SESSION['expenseNumber']))
+                {
+                    $expenseNumber = (int)$_SESSION['expenseNumber'];
+                    unset($_SESSION['expenseNumber']);
+                }
+
+                if (is_array($expenseIdArray))
+                {
+                    if (!empty($_SESSION['flash_notifications']) && $expenseNumber > 0)
+                    {
+                        $selected = $expenseNumber;
+                    }
+
+                    View::renderTemplate('Settings_expense/expense_change_date.html', [
+                        'ids' => $expesneIdArrayLength,
+                        'selected' => $selected
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_change_date.html');
+                }
+            }
+            elseif ($option === 'change-comment')
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+                $expesneIdArrayLength = count($expenseIdArray);
+                $selected = 0;
+                $expenseNumber = 0;
+                $comment = "";
+                $commentValue = "";
+
+                if (isset($_SESSION['expenseNumber']))
+                {
+                    $expenseNumber = (int)$_SESSION['expenseNumber'];
+                    unset($_SESSION['expenseNumber']);
+                }
+
+                if (isset($_SESSION['comment']))
+                {
+                    $comment = $_SESSION['comment'];
+                    unset($_SESSION['comment']);
+                }
+
+                if (is_array($expenseIdArray))
+                {
+                    if (!empty($_SESSION['flash_notifications']) && $expenseNumber > 0)
+                    {
+                        $selected = $expenseNumber;
+                    }
+
+                    if (!empty($_SESSION['flash_notifications']) && is_string($comment) && $comment !== "" && strlen($comment) > 0)
+                    {
+                        $commentValue = $comment;
+                    }
+
+                    View::renderTemplate('Settings_expense/expense_change_comment.html', [
+                        'ids' => $expesneIdArrayLength,
+                        'selected' => $selected,
+                        'comment' => $commentValue
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_change_comment.html');
+                }
+            }
+            elseif ($option === 'delete-item')
+            {
+                $expenseIdArray = CashFlow::returnExpensesId($_SESSION['user_id']);
+                $expesneIdArrayLength = count($expenseIdArray);
+
+                if (is_array($expenseIdArray))
+                {
+
+                    View::renderTemplate('Settings_expense/expense_delete_item.html', [
+                        'ids' => $expesneIdArrayLength
+                    ]);
+                }
+                else
+                {
+                    Flash::addMessage('Database error - expense numbers not generated', Flash::ORANGE);
+                    View::renderTemplate('Settings_expense/expense_delete_item.html');
+                }
+            }
+        }
+        else
+        {
+            View::renderTemplate('Settings/options.html');  
+        }  
+    }
+
+*/
 
     public function changeUsernameAction() 
     {
@@ -443,7 +1041,7 @@ class Settings extends \Core\Controller
      
         User::clearEmailChangeToken($token);
         
-        View::renderTemplate('Settings/email_change_website.html');   
+        View::renderTemplate('Settings_user/email_change_website.html');   
 
    //     Flash::addMessage('Match with database record not found');
    //     View::renderTemplate('Settings/email_change_website.html');
@@ -485,7 +1083,7 @@ class Settings extends \Core\Controller
         $this->redirect('/settings/display-settings/user/change-password');
     }
 
-    public function addCategoryAction() 
+    public function addExpenseCategoryAction() 
     {
         $categoryProvidedByUser = Validation::testInput($_POST['new-category']);
         $errors = Validation::validateCategoryOrPayment($categoryProvidedByUser, "Category");
@@ -493,7 +1091,7 @@ class Settings extends \Core\Controller
         if (empty($errors))
         {
             $categoryProvidedByUser = Validation::capitalizeFirstLetter($categoryProvidedByUser);
-            $expenseCategoryInDatabase = CashFlow::checkIfCategoryIsAssignedToUser($_SESSION['user_id'], $categoryProvidedByUser);
+            $expenseCategoryInDatabase = CashFlow::checkIfExpenseCategoryIsAssignedToUser($_SESSION['user_id'], $categoryProvidedByUser);
 
             if ($expenseCategoryInDatabase)
             {
@@ -501,7 +1099,7 @@ class Settings extends \Core\Controller
             }
             else
             {
-                $numberOfCategories = CashFlow::countNumberOfCategories($_SESSION['user_id']);
+                $numberOfCategories = CashFlow::countNumberOfExpenseCategories($_SESSION['user_id']);
 
                 if ($numberOfCategories === false)
                 {
@@ -525,7 +1123,7 @@ class Settings extends \Core\Controller
                             
                             if ($numberOfCategoriesInExpensesList < 18)
                             {
-                              $this->addCategoryToDatabaseDirectly($categoryProvidedByUser);
+                              $this->addExpenseCategoryToDatabaseDirectly($categoryProvidedByUser);
                             }
                             else
                             {
@@ -533,7 +1131,7 @@ class Settings extends \Core\Controller
 
                                 if ($isPresentOnExpensesList)
                                 {
-                                    $this->addCategoryToDatabaseDirectly($categoryProvidedByUser);
+                                    $this->addExpenseCategoryToDatabaseDirectly($categoryProvidedByUser);
                                 }
                                 elseif ($isPresentOnExpensesList === 0)
                                 {
@@ -559,6 +1157,83 @@ class Settings extends \Core\Controller
         }
 
         $this->redirect('/settings/display-settings/expense/add-category');
+
+    }
+
+    public function addIncomeCategoryAction() 
+    {
+        $categoryProvidedByUser = Validation::testInput($_POST['new-category']);
+        $errors = Validation::validateCategoryOrPayment($categoryProvidedByUser, "Category");
+
+        if (empty($errors))
+        {
+            $categoryProvidedByUser = Validation::capitalizeFirstLetter($categoryProvidedByUser);
+            $incomeCategoryInDatabase = CashFlow::checkIfIncomeCategoryIsAssignedToUser($_SESSION['user_id'], $categoryProvidedByUser);
+
+            if ($incomeCategoryInDatabase)
+            {
+                Flash::addMessage('Category exists. No changes done', Flash::ORANGE);
+            }
+            else
+            {
+                $numberOfCategories = CashFlow::countNumberOfIncomeCategories($_SESSION['user_id']);
+
+                if ($numberOfCategories === false)
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                }
+                else
+                {
+                    $numberOfCategories = (int)$numberOfCategories[0];
+
+                    if ($numberOfCategories < 18)
+                    {
+                        $numberOfCategoriesInIncomesList = CashFlow::countNumberOfCategoriesInIncomesList($_SESSION['user_id']);
+                        
+                        if ($numberOfCategoriesInIncomesList === false)
+                        {
+                            Flash::addMessage('Database error', Flash::ORANGE);
+                        }
+                        else
+                        {
+                            $numberOfCategoriesInIncomesList = (int)$numberOfCategoriesInIncomesList[0];
+                            
+                            if ($numberOfCategoriesInIncomesList < 18)
+                            {
+                              $this->addIncomeCategoryToDatabaseDirectly($categoryProvidedByUser);
+                            }
+                            else
+                            {
+                                $isPresentOnIncomesList = CashFlow::checkIfCategoryPresentOnIncomesList($_SESSION['user_id'], $categoryProvidedByUser);
+
+                                if ($isPresentOnIncomesList)
+                                {
+                                    $this->addIncomeCategoryToDatabaseDirectly($categoryProvidedByUser);
+                                }
+                                elseif ($isPresentOnIncomesList === 0)
+                                {
+                                    Flash::addMessage('Error. Your incomes list has maximum number of 18 different categories', Flash::ORANGE);
+                                }
+                                else
+                                {
+                                    Flash::addMessage('Database error', Flash::ORANGE);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Flash::addMessage('Error. Maximum number of categories is 18', Flash::ORANGE);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Flash::addMessage($errors[0], Flash::ORANGE);
+        }
+
+        $this->redirect('/settings/display-settings/income/add-category');
 
     }
 
@@ -639,7 +1314,7 @@ class Settings extends \Core\Controller
 
     }
 
-    public function deleteCategoryAction()
+    public function deleteExpenseCategoryAction()
     {
         if (isset($_POST['category']))
         {
@@ -649,7 +1324,7 @@ class Settings extends \Core\Controller
 
             if(empty($errors))
             {
-                $deletionResult = CashFlow::deleteCategory($_SESSION['user_id'], $category);
+                $deletionResult = CashFlow::deleteExpenseCategory($_SESSION['user_id'], $category);
 
                 if ($deletionResult)
                 {
@@ -671,6 +1346,41 @@ class Settings extends \Core\Controller
         }
 
         $this->redirect('/settings/display-settings/expense/delete-category');
+
+    }
+
+    public function deleteIncomeCategoryAction()
+    {
+        if (isset($_POST['category']))
+        {
+            $category = $_POST['category'];
+            $category = Validation::testInput($category);
+            $errors = Validation::validateCategoryOrPayment($category, "Category");
+
+            if(empty($errors))
+            {
+                $deletionResult = CashFlow::deleteIncomeCategory($_SESSION['user_id'], $category);
+
+                if ($deletionResult)
+                {
+                    Flash::addMessage('Category ' . '\'' . $category . '\'' . ' deleted', Flash::ORANGE);
+                }
+                else
+                {
+                    Flash::addMessage('Error. Category ' . '\'' . $category . '\'' . ' not deleted', Flash::ORANGE);
+                }
+            }
+            else
+            {
+                Flash::addMessage($errors[0], Flash::ORANGE);
+            }
+        }
+        else
+        {
+            Flash::addMessage('Form not submitted', Flash::ORANGE);
+        }
+
+        $this->redirect('/settings/display-settings/income/delete-category');
 
     }
 
@@ -760,6 +1470,59 @@ class Settings extends \Core\Controller
         }
          
         $this->redirect('/settings/display-settings/expense/change-category');
+        
+    }
+
+    public function changeCategoryForIncomeItemAction()
+    {
+        if (!empty($_POST['incomeNumber']) && !empty($_POST['category']))
+        {
+            $incomeNumber = $_POST['incomeNumber'];
+            $category = $_POST['category'];
+
+            if ($incomeNumber != "--" && $category != "--")
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                $incomeId = $incomeIdArray[(int)$incomeNumber - 1]['id'];
+                $incomeId = (int)$incomeId;
+                $isCategoryTheSame = CashFlow::checkIfCurrentCategoryForIncomeItemIsTheSame($incomeId, $category);
+
+                if ($isCategoryTheSame)
+                {
+                    Flash::addMessage('No changes. It is the current category for income item ' . $incomeNumber , Flash::ORANGE);
+                    $_SESSION['incomeNumber'] = $incomeNumber;
+                }
+                elseif ($isCategoryTheSame === 0)
+                {
+                    $isCategoryChanged = CashFlow::changeCategoryForIncomeItem($incomeId, $category);
+
+                    if ($isCategoryChanged)
+                    {
+                        Flash::addMessage('Category ' . '\'' . $category . '\'' . ' assigned to item ' . $incomeNumber, Flash::ORANGE);
+                    }
+                    else
+                    {
+                        Flash::addMessage('Error. Category not changed', Flash::ORANGE);
+                    }
+                }
+                else
+                {
+                    Flash::addMessage('Database error', Flash::ORANGE);
+                }
+                
+            }
+            else
+            {
+                Flash::addMessage('Error. Income item or category cannot have value \'--\'', Flash::ORANGE);
+            }
+        
+        }
+        else
+        {
+            Flash::addMessage('Error. No value for income item or category', Flash::ORANGE);
+        }
+         
+        $this->redirect('/settings/display-settings/income/change-category');
         
     }
 
@@ -879,6 +1642,69 @@ class Settings extends \Core\Controller
         
     }
 
+    public function changeAmountForIncomeItemAction()
+    {
+        if (!empty($_POST['incomeNumber']) && !empty($_POST['amount']))
+        {
+            $incomeNumber = $_POST['incomeNumber'];
+            $amount = $_POST['amount'];
+            $valueNotAllowed = array("--","0.", "0.0", "0.00");
+
+            if (!in_array($incomeNumber, $valueNotAllowed) && !in_array($amount, $valueNotAllowed))
+            {
+                $amount = Validation::testInput($amount);
+                $errors = Validation::validateAmount($amount);
+                
+                if (empty($errors))
+                {
+                    $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+                    $incomeId = $incomeIdArray[(int)$incomeNumber - 1]['id'];
+                    $incomeId = (int)$incomeId;
+                    $isAmountTheSame = CashFlow::checkIfCurrentAmountForIncomeItemIsTheSame($incomeId, $amount);
+
+                    if ($isAmountTheSame)
+                    {
+                        Flash::addMessage('No changes. It is the current amount for income item ' . $incomeNumber , Flash::ORANGE);
+                        $_SESSION['incomeNumber'] = $incomeNumber;
+                    }
+                    elseif ($isAmountTheSame === 0)
+                    {
+                        $isAmountChanged = CashFlow::changeAmountForIncomeItem($incomeId, $amount);
+    
+                        if ($isAmountChanged)
+                        {
+                            Flash::addMessage('Amount ' . '\'' . $amount . '\'' . ' assigned to item ' . $incomeNumber, Flash::ORANGE);
+                        }
+                        else
+                        {
+                            Flash::addMessage('Error. Amount not changed', Flash::ORANGE);
+                        }
+                        
+                    }
+                    else
+                    {
+                        Flash::addMessage('Database error', Flash::ORANGE);
+                    }
+                }
+                else
+                {
+                    Flash::addMessage($errors[0], Flash::ORANGE);
+                }
+            }
+            else
+            {
+                Flash::addMessage('Error. Income item or amount cannot have value \'--\' or value 0', Flash::ORANGE);
+            }
+        }         
+        else
+        {
+            Flash::addMessage('Error. No value for income item or amount', Flash::ORANGE);
+        }  
+
+        $this->redirect('/settings/display-settings/income/change-amount');
+        
+    }
+
     public function changeDateForExpenseItemAction()
     {
         if (!empty($_POST['expenseNumber']) && !empty($_POST['date']))
@@ -917,7 +1743,7 @@ class Settings extends \Core\Controller
                             {
                                 $singleExpenseItem = CashFlow::returnSingleExpenseItem($expenseId);
 
-                                if ($date <= $singleExpenseItem->date_of_expense_first && $date >= '2023-01-01')
+                                if ($date <= $singleExpenseItem->date_of_expense_current && $date >= '2023-01-01')
                                 {
                                     $isDateChanged = CashFlow::changeDateForExpenseItem($expenseId, $date);
             
@@ -932,14 +1758,14 @@ class Settings extends \Core\Controller
                                 }
                                 else
                                 {  
-                                    if ($singleExpenseItem->date_of_expense === $singleExpenseItem->date_of_expense_first) 
+                                    if ($singleExpenseItem->date_of_expense === $singleExpenseItem->date_of_expense_current) 
                                     {
-                                        $previousDate = date('Y-m-d', strtotime($singleExpenseItem->date_of_expense_first .' -1 day'));
+                                        $previousDate = date('Y-m-d', strtotime($singleExpenseItem->date_of_expense_current .' -1 day'));
                                         Flash::addMessage('You can use date from 2023-01-01 to ' . $previousDate . ' inclusive', Flash::ORANGE);
                                     }
                                     else
                                     {
-                                        Flash::addMessage('You can use date from 2023-01-01 to ' . $singleExpenseItem->date_of_expense_first . ' inclusive. You cannot use date ' . $singleExpenseItem->date_of_expense, Flash::ORANGE);
+                                        Flash::addMessage('You can use date from 2023-01-01 to ' . $singleExpenseItem->date_of_expense_current . ' inclusive. You cannot use date ' . $singleExpenseItem->date_of_expense, Flash::ORANGE);
                                     }
                                    
                                     $_SESSION['expenseNumber'] = $expenseNumber;
@@ -977,6 +1803,106 @@ class Settings extends \Core\Controller
         }  
 
         $this->redirect('/settings/display-settings/expense/change-date');
+    }
+
+    public function changeDateForIncomeItemAction()
+    {
+        if (!empty($_POST['incomeNumber']) && !empty($_POST['date']))
+        {
+            $incomeNumber = $_POST['incomeNumber'];
+            $date = $_POST['date'];
+            $isMatched = preg_match("/^[1-9]+\d*$/",$incomeNumber) ? true : false;
+
+            if ($isMatched)
+            {
+                $date = Validation::testInput($date);
+                $errors = Validation::validateDate($date);
+
+                if (empty($errors))
+                {
+                    list($year, $month, $day) = explode('-', $date);
+                    $isDate = checkdate($month, $day, $year);
+
+                    if ($isDate)
+                    {
+                        $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+
+                        if (is_array($incomeIdArray) && !empty($incomeIdArray))
+                        {
+                            $incomeId = $incomeIdArray[(int)$incomeNumber - 1]['id'];
+                            $incomeId = (int)$incomeId;
+
+                            $isDateTheSame = CashFlow::checkIfCurrentDateForIncomeItemIsTheSame($incomeId, $date);
+
+                            if ($isDateTheSame)
+                            {
+                                Flash::addMessage('No changes. Date ' . $date . ' is the current one for income item ' . $incomeNumber , Flash::ORANGE);
+                                $_SESSION['incomeNumber'] = $incomeNumber;
+                            }
+                            elseif ($isDateTheSame === 0)
+                            {
+                                $singleIncomeItem = CashFlow::returnSingleIncomeItem($incomeId);
+
+                                if ($date <= $singleIncomeItem->date_of_income_current && $date >= '2023-01-01')
+                                {
+                                    $isDateChanged = CashFlow::changeDateForIncomeItem($incomeId, $date);
+            
+                                    if ($isDateChanged)
+                                    {
+                                        Flash::addMessage('Date ' . '\'' . $date . '\'' . ' assigned to item ' . $incomeNumber, Flash::ORANGE);
+                                    }
+                                    else
+                                    {
+                                        Flash::addMessage('Error. Date not changed', Flash::ORANGE);
+                                    }  
+                                }
+                                else
+                                {  
+                                    if ($singleIncomeItem->date_of_income === $singleIncomeItem->date_of_income_current) 
+                                    {
+                                        $previousDate = date('Y-m-d', strtotime($singleIncomeItem->date_of_income_current .' -1 day'));
+                                        Flash::addMessage('You can use date from 2023-01-01 to ' . $previousDate . ' inclusive', Flash::ORANGE);
+                                    }
+                                    else
+                                    {
+                                        Flash::addMessage('You can use date from 2023-01-01 to ' . $singleIncomeItem->date_of_income_current . ' inclusive. You cannot use date ' . $singleIncomeItem->date_of_income, Flash::ORANGE);
+                                    }
+                                   
+                                    $_SESSION['incomeNumber'] = $incomeNumber;
+                                }
+                                
+                            }
+                            else
+                            {
+                                Flash::addMessage('Database error', Flash::ORANGE);
+                            }
+                        }
+                        else
+                        {
+                            Flash::addMessage('Database error or no incomes items registered', Flash::ORANGE);
+                        }
+                    }
+                    else
+                    {
+                        Flash::addMessage('Error. Incorrect date provided - this date does not exist', Flash::ORANGE);
+                    }
+                }
+                else
+                {
+                    Flash::addMessage($errors[0], Flash::ORANGE);
+                }
+            }
+            else
+            {
+                Flash::addMessage('Error. Income item should have numeric format', Flash::ORANGE);
+            }
+        }
+        else
+        {
+            Flash::addMessage('Error. No value for income item or date', Flash::ORANGE);
+        }  
+
+        $this->redirect('/settings/display-settings/income/change-date');
     }
 
     public function changeCommentForExpenseItemAction()
@@ -1077,6 +2003,104 @@ class Settings extends \Core\Controller
         $this->redirect('/settings/display-settings/expense/change-comment');
     }
 
+    public function changeCommentForIncomeItemAction()
+    {
+        if (!empty($_POST['incomeNumber']) && isset($_POST['comment']))
+        {
+            $incomeNumber = $_POST['incomeNumber'];
+            $comment = $_POST['comment'];
+            $isMatched = preg_match("/^[1-9]+\d*$/",$incomeNumber) ? true : false;
+
+            if ($isMatched)
+            {
+                $comment = Validation::testInput($comment);
+                $errors = Validation::validateComment($comment);
+            
+                if (empty($errors))
+                {
+                    $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+
+                    if (is_array($incomeIdArray) && !empty($incomeIdArray))
+                    {
+                        $incomeId = $incomeIdArray[(int)$incomeNumber - 1]['id'];
+                        $incomeId = (int)$incomeId;
+
+                        $singleIncomeItem = CashFlow::returnSingleIncomeItem($incomeId);
+
+                        if ($singleIncomeItem !== false)
+                        {  
+                            if ($singleIncomeItem->income_comment !== $comment)
+                            {
+
+                                $isCommentChanged = CashFlow::changeCommentForIncomeItem($incomeId, $comment);
+            
+                                if ($isCommentChanged)
+                                {
+                                    Flash::addMessage('New comment assigned to item ' . $incomeNumber, Flash::ORANGE);
+                                }
+                                else
+                                {
+                                    Flash::addMessage('Error. Comment not changed', Flash::ORANGE);
+                                }  
+
+                            }
+                            elseif ($singleIncomeItem->income_comment === $comment && $comment === "")
+                            {
+                                Flash::addMessage('Income item ' . $incomeNumber . ' has no comment, so no changes done', Flash::ORANGE);
+                                $_SESSION['incomeNumber'] = $incomeNumber; 
+                            }
+                            elseif ($singleIncomeItem->income_comment === $comment && $comment !== "")
+                            {
+                                Flash::addMessage('This is current comment for income item ' . $incomeNumber . ' so no changes done', Flash::ORANGE);
+                                $_SESSION['incomeNumber'] = $incomeNumber;
+                                $_SESSION['comment'] = $comment;
+                            }
+                            else
+                            {
+                                Flash::addMessage('Processing error', Flash::ORANGE);
+                            }
+                        }
+                        else
+                        {
+                            Flash::addMessage('Database error or no income item found', Flash::ORANGE);
+                        }
+                    }
+                    else
+                    {
+                        Flash::addMessage('Database error or no incomes items registered', Flash::ORANGE);
+                    }
+                }
+                else
+                {
+                    $errorArrayLength = count($errors);
+
+                    if ($errorArrayLength > 1)
+                    {
+                        for ($counter = 0; $counter < $errorArrayLength; $counter++)
+                        {
+                            $errorNumber = $counter + 1;
+                            Flash::addMessage($errorNumber . '. ' . $errors[$counter], Flash::ORANGE);
+                        }
+                    }
+                    else
+                    {
+                        Flash::addMessage($errors[0], Flash::ORANGE);
+                    }
+                }
+            }
+            else
+            {
+                Flash::addMessage('Error. Income item should have numeric format', Flash::ORANGE);
+            }
+        }
+        else
+        {
+            Flash::addMessage('Error. Income item or comment (or both) does not exist or income number generated as empty', Flash::ORANGE);
+        }  
+
+        $this->redirect('/settings/display-settings/income/change-comment');
+    }
+
     public function deleteExpenseItemAction()
     {
         if (!empty($_POST['expenseNumber']))
@@ -1122,6 +2146,53 @@ class Settings extends \Core\Controller
         }  
 
         $this->redirect('/settings/display-settings/expense/delete-item');
+    }
+
+    public function deleteIncomeItemAction()
+    {
+        if (!empty($_POST['incomeNumber']))
+        {
+            $incomeNumber = $_POST['incomeNumber'];
+            $isMatched = preg_match("/^[1-9]+\d*$/",$incomeNumber) ? true : false;
+
+            if ($isMatched)
+            {
+                $incomeIdArray = CashFlow::returnIncomesId($_SESSION['user_id']);
+
+                if (is_array($incomeIdArray) && !empty($incomeIdArray) && isset($incomeIdArray[(int)$incomeNumber - 1]))
+                {
+                    $incomeId = $incomeIdArray[(int)$incomeNumber - 1]['id'];
+                    $incomeId = (int)$incomeId;
+
+                    $isItemDeleted = CashFlow::deleteIncomeItem($incomeId);
+
+                    if ($isItemDeleted)
+                    {
+                        Flash::addMessage('Income item deleted', Flash::ORANGE);
+                    }
+                    else
+                    {
+                        Flash::addMessage('Error. Income item not deleted', Flash::ORANGE);
+                    }  
+
+                }
+                else
+                {
+                    Flash::addMessage('Database error or no incomes items registered or provided income number is out of range', Flash::ORANGE);
+                }
+               
+            }
+            else
+            {
+                Flash::addMessage('Error. Income item should have numeric format', Flash::ORANGE);
+            }
+        }
+        else
+        {
+            Flash::addMessage('Error. Income item does not exist or it is generated as empty', Flash::ORANGE);
+        }  
+
+        $this->redirect('/settings/display-settings/income/delete-item');
     }
 
 }

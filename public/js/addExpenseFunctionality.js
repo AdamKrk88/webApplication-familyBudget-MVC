@@ -44,12 +44,14 @@ $(document).ready(function() {
 
     });
 
+    var amountBefore;
     //restriction for amount input provided as manual, so from keyboard
     amountInput.on('keypress', function (event) {
         var regexInputBeginning = new RegExp("[e\+\-\.]","i");
         var regexNext = new RegExp("[e\+\-]","i");
-        var resultOfMatch = $(this).val().match(/^\d+\.?\d?$/) ? true : false;
+        var resultOfMatch = $(this).val().match(/^\d*\.?\d?\d?$/) ? true : false;
         var key = String.fromCharCode(!event.key ? event.which : event.charCode);
+        amountBefore = $(this).val();
 
         if ($(this).val().length == 0 && regexInputBeginning.test(key)) {
             event.preventDefault(); 
@@ -62,9 +64,25 @@ $(document).ready(function() {
 
     //keep two decimal places
     amountInput.change(function () {
-        var result = parseFloat($(this).val()).toFixed(2);
-        $(this).val(result);
-    });   
+        if ($(this).val() !== null && $(this).val().trim() !== "") {
+            var result = parseFloat($(this).val()).toFixed(2);
+            $(this).val(result);
+        }
+    });  
+
+    //if there is try to have three decimal places, then amount is rounded to one or two decimal places depending on the condition
+    amountInput.on('input', function () {
+        var amountAfterRounded = (Math.floor(parseFloat($(this).val())*100)/100).toString();
+
+        if ($(this).val().split(".").length === 2 && $(this).val().split(".")[1].length > 2) {
+            if (amountBefore === amountAfterRounded) {
+                $(this).val(Math.floor(parseFloat($(this).val())*100)/100); 
+            }
+            else {
+                $(this).val(Math.floor(parseFloat($(this).val())*10)/10);   
+            }
+        }
+    }); 
  
 
     //no manual input for date
@@ -77,11 +95,21 @@ $(document).ready(function() {
         amountInput.get(0).required = false;
         dateInput.get(0).required = false;
         isRequiredFieldsBlank = false;
-   //     $('#logoForPage').focus();
-       
+
+        //delete message(s) from prevous button click 
+        if ($("#expense-message-second").length) 
+        {
+            $("#expense-message-first").text("");
+            $("#expense-message-second").text("");
+        }
+        else if ($("#expense-message-first").length)
+        {
+            $("#expense-message-first").text("");
+        }
+
         //validation if amount or date fields are empty
         if(amountInput.val() =='' || amountInput.val().length - 1 == 0) {
-            $('#expenseRegisterConfirmation > p').html('');
+            $('#expenseRegisterConfirmation > p').text('');
             amountInput.get(0).required = true;
             amountInput.get(0).oninput = function() {this.setCustomValidity('');};
             amountInput.get(0).oninvalid = function() {this.setCustomValidity('Please fill out this field');};
@@ -89,7 +117,7 @@ $(document).ready(function() {
             isRequiredFieldsBlank = true;
         }
         else if(dateInput.val() =='' || dateInput.val().length == 0) {
-            $('#expenseRegisterConfirmation > p').html('');
+            $('#expenseRegisterConfirmation > p').text('');
             dateInput.get(0).required = true;
             dateInput.get(0).oninput = function() {this.setCustomValidity('');};
             dateInput.get(0).oninvalid = function() {this.setCustomValidity('Please fill out this field');};
@@ -109,24 +137,44 @@ $(document).ready(function() {
                     url: "/ajax/processSecondForm",
                     data: $('#secondForm').serialize()+"&ajax="+true,
                     success: function(errorMessage) {
-                        if(!errorMessage) {
-                            $('#expenseRegisterConfirmation > p').html('Expense is registered successfully. Click <a href=\"/expense/display-expense-form\" class=\"font-light-orange link-registration-income-expense\">here</a> to insert next one');
-                            $('#buttonToSubmitForm').prop('disabled', true);
+                        var json = JSON.parse(errorMessage);
+                        if(json.length === 0) {
+                            $('#expense-message-first').text('Expense is registered successfully');
+                            amountInput.val('');
+                            
+                            if ($('#comment').val().length > 0) {
+                                $('#comment').val('');
+                            }
+                   //         $('#buttonToSubmitForm').prop('disabled', true);
+                        }
+                        else if (json.length === 1) {
+                            $('#expense-message-first').text(json[0]);
+               //             $('#buttonToSubmitForm').blur();
+                        }
+                        else if (json.length === 2) {
+                            $('#expense-message-first').text("1. " + json[0]);
+                            $('#expense-message-second').text("2. " + json[1]);
+                  //          $('#buttonToSubmitForm').blur();
                         }
                         else {
-                            var json = JSON.parse(errorMessage);
-                            $('#expenseRegisterConfirmation > p').html(json);
-                            $('#buttonToSubmitForm').blur();
+                         //   var json = JSON.parse(errorMessage);
+                            $('#expense-message-first').text('Internal error in aplication');
+                   //         $('#buttonToSubmitForm').blur();
+                            $('#buttonToSubmitForm').prop('disabled', true);
                         }
+
+                        $('#buttonToSubmitForm').blur();
                     },
                     error: function() {
                         alert("Something went wrong. Error");
                         $('#buttonToSubmitForm').blur();
+                        $('#buttonToSubmitForm').prop('disabled', true);
                     }
                 });
                 }).fail(function() {
                     alert("Something went wrong. Error");
                     $('#buttonToSubmitForm').blur();
+                    $('#buttonToSubmitForm').prop('disabled', true);
                     });
         }  
     });   

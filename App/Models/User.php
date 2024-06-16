@@ -159,7 +159,7 @@ class User extends \Core\Model
         }
         elseif ($this->username != '') 
         {
-            if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$this->username)) 
+            if (!preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/",$this->username)) 
             {
                 $this->errors[] = "Only letters and one space allowed in name. Please use standard English characters";
             }
@@ -199,8 +199,8 @@ class User extends \Core\Model
         }
         elseif ($this->new_password !='') 
         {
-            $uppercase = preg_match('@[A-Z]@', $this->new_password);
-            $lowercase = preg_match('@[a-z]@', $this->new_password);
+            $uppercase = preg_match('@[A-ZĄĆĘŁŃÓŚŹŻ]@', $this->new_password);
+            $lowercase = preg_match('@[a-ząćęłńóśźż]@', $this->new_password);
             $number    = preg_match('@[0-9]@', $this->new_password);
             $specialChars = preg_match('@[^\w]@', $this->new_password);
             
@@ -293,8 +293,8 @@ class User extends \Core\Model
             $this->errors[] = 'Name is required';
         }
         elseif ($this->username != '') {
-            if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$this->username)) {
-                $this->errors[] = "Only letters and one space allowed in name. Please use standard English characters";
+            if (!preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/",$this->username)) {
+                $this->errors[] = "Only letters and one space allowed in name";
             }
         }
         
@@ -317,8 +317,8 @@ class User extends \Core\Model
             $this->errors[] = 'Password is required';
         }
         elseif ($this->password !='') {
-            $uppercase = preg_match('@[A-Z]@', $this->password);
-            $lowercase = preg_match('@[a-z]@', $this->password);
+            $uppercase = preg_match('@[A-ZĄĆĘŁŃÓŚŹŻ]@', $this->password);
+            $lowercase = preg_match('@[a-ząćęłńóśźż]@', $this->password);
             $number    = preg_match('@[0-9]@', $this->password);
             $specialChars = preg_match('@[^\w]@', $this->password);
             

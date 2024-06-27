@@ -6,7 +6,7 @@
 
 	<header class="d-flex navbar-light-yellow">	
 		<div class="header-login">
-			<img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span>
+			<a class="navbar-brand" href="/"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span></a>
 		</div>
 	</header>
 
@@ -17,7 +17,13 @@
 
 	<main class="content-wrapper">
 		<div class="row initialHeightForContent align-items-center">
-			<article>		
+			<article>	
+				<section class="position-relative">
+                    <div class="col-lg-5 col-md-6 col-sm-7 position-absolute start-50 bottom-0 translate-middle-x mx-auto">
+                        <p class="text-center font-orange w-100 m-0" id="password-validation-failed"></p>
+                        <p class="text-center font-orange w-100 m-0" id="validation-password-jquery"></p>
+                    </div>
+                </section>
 				<header>
 					<div class="col-lg-5 col-md-6 col-sm-7 bg-light-grey p-2 mx-auto">	
 						<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0 ">Password reset<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/">Back to Login</a></h2>
@@ -36,7 +42,7 @@
                         </div>	
                     
                         <div class="d-grid mt-4">
-							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Password reset button">Change password</button>
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" id="data-change-button" type="submit" aria-label="Password reset button" disabled>Change password</button>
 						</div>			
 					</form>
 				</div>	
@@ -50,5 +56,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="/js/hideShowPassword.js"></script>
+	<script src="/js/passwordValidation.js"></script>
 
 {% endblock %}	

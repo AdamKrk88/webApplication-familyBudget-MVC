@@ -28,21 +28,28 @@ class Signup extends OpenAccess
     public function createAction()
     {
         // var_dump($_POST);
-        
-        $user = new User($_POST);
 
-        if ($user->save()) {
+        if (isset($_POST) && count($_POST) > 0)
+        {
+            $user = new User($_POST);
 
-            $user->sendActivationEmail();
-       //     Flash::addMessage('Your registration is successful. You can log in', Flash::ORANGE);
-            $this->redirect('/signup/success');
+            if ($user->save()) 
+            {
+                $user->sendActivationEmail();
+        //     Flash::addMessage('Your registration is successful. You can log in', Flash::ORANGE);
+                $this->redirect('/signup/success');
 
-        } else {
-
-            View::renderTemplate('Signup/fail.html', [
-                'user' => $user
-            ]);
-
+            } else 
+            {
+                View::renderTemplate('Signup/fail.html', [
+                    'user' => $user,
+                    'userInput' => $_POST
+                ]);
+            }
+        }
+        else
+        {
+            $this->redirect('/signup/new');
         }
         
     }

@@ -6,7 +6,7 @@
 
 	<header class="d-flex navbar-light-yellow">	
 		<div class="header-login">
-			<img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span>
+			<a class="navbar-brand" href="/"><img class="me-1 ms-1 d-inline-block align-middle" src="/images/gold-ingots.png" alt="Gold bar" /><span class="text-uppercase font-weight-bold font-size-scaled-from-30px-navbar align-middle"> Budget Manager</span></a>
 		</div>
 	</header>
 
@@ -16,10 +16,16 @@
 
 	<div class="content-wrapper">
 		<div class="row initialHeightForContent align-items-center">
-			<div class="col-sm-6">
+			<div class="col-sm-6 align-self-end">
 				<div class="row">
 					<main>
-						<article>		
+						<article class="mb-5">	
+							<section class="position-relative">
+								<div class="col-lg-10 col-md-10 col-sm-12 position-absolute bottom-0 mx-auto" id="expenseRegisterConfirmation">
+									<p class="font-orange text-center m-0" id="password-validation-failed"></p>
+									<p class="font-orange text-center m-0" id="missing-information"></p>
+								</div>
+							</section>		
 							<header> 
 								<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey p-2">	
 									<h2 class="font-color-black fw-bolder font-size-scaled-from-30px position-relative m-0">Register<a class="position-absolute top-50 end-0 translate-middle-y font-size-scaled-from-15px link-registration-income-expense font-color-black py-1 pe-2 fst-italic" href="/">Back to Login</a></h2>
@@ -27,20 +33,35 @@
 							</header>
 							<div class="col-lg-10 col-md-10 col-sm-12 bg-light-grey px-2 pb-2">	
 								<div class="underline"></div>   
-								<form class="lh-1" action="/signup/create" method="post">		
+								<form class="lh-1" action="/signup/create" method="post">	
+
+				
 									<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="name">Name</label>
-									<input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="username" id="name" title="Please fill out this field" aria-label="Name input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
+									<input class="form-control form-control-sm fw-bold font-color-grey" type="text" {% if user.incorrectInput.name is not defined %} value={{userInput.username}} {% endif %} name="username" id="name" title="Please fill out this field" aria-label="Name input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
 									<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email address</label>
-									<input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" title="Please fill out this field" aria-label="Email address input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
+									<input class="form-control form-control-sm fw-bold font-color-grey" type="email" {% if user.incorrectInput.email is not defined %} value={{userInput.email}} {% endif %} name="email" id="email" title="Please fill out this field" aria-label="Email address input for user registration" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />		
 									
 									<div class="password-container">
 										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
-										<input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="Password to be created for user account" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+										<input class="form-control form-control-sm fw-bold font-color-grey" type="password" {% if user.incorrectInput.password is not defined %} value={{userInput.password}} {% endif %} name="password" id="password" title="Please fill out this field" aria-label="Password to be created for user account" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
 										<i class="icon-eye" id="show-password"></i>
-									</div>									
+									</div>								
+								<!--	
+									<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="name">Name</label>
+									<input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="username" id="name" title="Please fill out this field" aria-label="Name input for user registration"/>		
+									<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="email">Email address</label>
+									<input class="form-control form-control-sm fw-bold font-color-grey" type="email" name="email" id="email" title="Please fill out this field" aria-label="Email address input for user registration" />		
 									
+									<div class="password-container">
+										<label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="password">Password</label>
+										<input class="form-control form-control-sm fw-bold font-color-grey" type="password" name="password" id="password" title="Please fill out this field" aria-label="Password to be created for user account" />
+										<i class="icon-eye" id="show-password"></i>
+									</div>		  -->
+
+
+
 									<div class="d-grid mt-5">
-										<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" aria-label="Register button">Register</button>
+										<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" id="registration-button" type="submit" aria-label="Register button" disabled>Register</button>
 									</div>			
 								</form>
 							</div>
@@ -76,5 +97,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="/js/hideShowPassword.js"></script>
+	<script src="/js/registrationValidation.js"></script>    
 
 {% endblock %}	

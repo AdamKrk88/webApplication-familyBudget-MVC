@@ -24,6 +24,10 @@ class Login extends OpenAccess
     {
         View::renderTemplate('Login/login.html'); 
 
+   //     View::renderTemplate('Test/test.html', [
+   //         'myArray' => []
+   //     ]); 
+
  //    if (preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/","Adam Stępniewski")) {
  //      echo "Works";
  //       }

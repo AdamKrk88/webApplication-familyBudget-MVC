@@ -45,7 +45,7 @@ class Validation
         {
             if (!preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/",$dataToBeValidated) || strlen($dataToBeValidated) > 20) 
             {
-                $errors[] = "Only letters and one space allowed in name. Maximum number of characters is 20";
+                $errors[] = "Only letters and one space allowed. Maximum number of characters is 20";
             }
         }
 

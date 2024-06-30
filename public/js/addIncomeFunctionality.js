@@ -28,7 +28,7 @@ $(document).ready(function() {
     }
 
      //set up minimum and maximal expense/income amount for single item
-    amountInput.on('input', function (event) {
+ /*   amountInput.on('input', function (event) {
         var min = parseFloat($(this).attr('min'));
         var max = parseFloat($(this).attr('max'));
         var amountProvided = parseFloat($(this).val());
@@ -42,7 +42,7 @@ $(document).ready(function() {
             $(this).val(min);
         }       
 
-    });
+    });   */
 
   /*  //no possibilty to type +, -, e, E in amount field
     amountInput.get(0).oninput = function() {
@@ -82,6 +82,20 @@ $(document).ready(function() {
 
     //keep two decimal places
     amountInput.change(function () {
+        var min = parseFloat($(this).attr('min'));
+        var max = parseFloat($(this).attr('max'));
+        var amountProvided = parseFloat($(this).val());
+        
+        if (amountProvided > max)
+        {
+            $(this).val(max);
+        }
+        else if (amountProvided < min)
+        {
+            $(this).val(min);
+        }     
+
+
         if ($(this).val() !== null && $(this).val().trim() !== "") {
             var result = parseFloat($(this).val()).toFixed(2);
             $(this).val(result);
@@ -102,11 +116,147 @@ $(document).ready(function() {
         }
     }); 
 
+    //Comment validation on front-end side
+    let commentFirstTry = true;
+
+    $("#comment").keyup(function () { 
+        if (commentFirstTry === true)
+        {
+            clearErrorMessages(2);
+        }
+        validateComment(); 
+    }); 
+
+
+    function validateComment() { 
+        let commentValue = $("#comment").val(); 
+        commentValue = $.trim(commentValue);
+        let commentLength = commentValue.length;
+        let isCommentValid = /^[a-ząćęłńóśźż0-9\040\.\-\/]*$/i.test(commentValue);
+
+        if (!isCommentValid && commentLength > 0 && commentLength < 51) 
+        { 
+            clearErrorMessages(1);
+            provideErrorMessageFromClientCommentValidation("#income-message-first", "Only letters, numbers, space, forward slash, period and dash allowed in the comment");
+            
+            deactivateSubmitFormButton()
+            
+            isItFirstTryForComment(false);
+    //        checkAndUpdateCommentReadiness(false);
+        } 
+        else if (commentLength === 0)
+        {
+            clearErrorMessages(2);
+            activateSubmitFormButton();
+            isItFirstTryForComment(false);
+    //        checkAndUpdateCommentReadiness(true);
+        }
+        else if (!isCommentValid && commentLength > 50) 
+        { 
+            provideErrorMessageFromClientCommentValidation("#income-message-first", "1. Only letters, numbers, space, forward slash, period and dash allowed in the comment"); 
+            provideErrorMessageFromClientCommentValidation("#income-message-second", "2. Length of comment must be between 0 (no comment) and 50"); 
+
+            deactivateSubmitFormButton()
+            
+            isItFirstTryForComment(false);
+     //       checkAndUpdateCommentReadiness(false);
+        } 
+        else if (isCommentValid && commentLength > 50)
+        {
+            clearErrorMessages(1);
+            provideErrorMessageFromClientCommentValidation("#income-message-first", "Length of comment must be between 0 (no comment) and 50"); 
+            deactivateSubmitFormButton()
+            
+            isItFirstTryForComment(false);
+        }
+        else 
+        { 
+            clearErrorMessages(2);
+     
+            activateSubmitFormButton();
+            
+            isItFirstTryForComment(false);
+      //      checkAndUpdateCommentReadiness(true);
+        } 
+    }
+    
+    function provideErrorMessageFromClientCommentValidation(element, errorMessage)
+    {
+        if ($(element).text() !== errorMessage)
+        {
+            $(element).text(errorMessage);
+        }
+    }
+
+    function clearErrorMessages(clearNumber)
+    {
+        if (clearNumber === 1)
+        {
+            if ($("#income-message-second").text().length > 0)
+            {
+                $("#income-message-second").empty();
+            }
+        }
+
+        if (clearNumber === 2)
+        {
+            if ($("#income-message-second").text().length > 0)
+            {
+                $("#income-message-second").empty();
+            }
+
+            if ($("#income-message-first").text().length > 0)
+            {
+                $("#income-message-first").empty();
+            }
+        }  
+    }
+/*
+    function checkAndUpdateCommentReadiness(readinessStatus)
+    {
+        if (commentCheck === !readinessStatus)
+        {
+            commentCheck = readinessStatus;
+        }
+    }
+*/
+    function isItFirstTryForComment(firstTry)
+    {
+        if (commentFirstTry === !firstTry)
+        {
+            commentFirstTry = firstTry;
+        }
+    }
+
+    function activateSubmitFormButton()
+    {
+        let isButtonDisabled = $('#buttonToSubmitForm').is(":disabled");
+        
+        if (isButtonDisabled) 
+        {
+            $('#buttonToSubmitForm').prop('disabled', false);
+        }
+    }
+
+    function deactivateSubmitFormButton()
+    {
+        let isButtonDisabled = $('#buttonToSubmitForm').is(":disabled");
+        
+        if (!isButtonDisabled) 
+        {
+            $('#buttonToSubmitForm').prop('disabled', true);
+        }
+    }
+
+
+
+
     //action to be taken after button click
     $('#buttonToSubmitForm').click(function() {
         amountInput.get(0).required = false;
         dateInput.get(0).required = false;
         isRequiredFieldsBlank = false;
+        commentFirstTry = true;
 
         //delete message(s) from prevous button click 
         if ($("#income-message-second").length) 

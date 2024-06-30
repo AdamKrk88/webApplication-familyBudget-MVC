@@ -12,7 +12,7 @@ $(document).ready(function() {
         let commentValue = $("#data-to-be-changed-comment").val(); 
         let expenseNumber = $('#expense-income-number').val();
         commentValue = $.trim(commentValue);
-        let isCommentValid = /^[a-z0-9\040\.\-\/]*$/i.test(commentValue);
+        let isCommentValid = /^[a-ząćęłńóśźż0-9\040\.\-\/]*$/i.test(commentValue);
         let expenseNumberIsNumeric = $.isNumeric(expenseNumber);
         let expenseNumberIsPositiveInteger = /^[1-9]\d*$/.test(expenseNumber);
 

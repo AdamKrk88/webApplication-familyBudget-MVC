@@ -6,8 +6,10 @@ $(document).ready(function() {
 
     //keep two decimal places
     $('#data-to-be-changed').change(function () {
-        var result = parseFloat($(this).val()).toFixed(2);
-        $(this).val(result);
+        if ($(this).val() !== null && $(this).val().trim() !== "") {
+            var result = parseFloat($(this).val()).toFixed(2);
+            $(this).val(result);
+        }
     });  
 
     //set up minimum and maximal expense/income amount for single item

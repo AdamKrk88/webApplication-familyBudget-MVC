@@ -644,7 +644,7 @@
 			}, 
 			success: function(dataToUpdateFirstPage) {
 				var json = JSON.parse(dataToUpdateFirstPage);
-			
+			//	alert(json[1]['id']);
 				if (Array.isArray(json) && json.length) {
 					dataToDisplayList = json;
 					var numberOfCategories = provideNumberOfCategories(json);

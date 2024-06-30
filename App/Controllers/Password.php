@@ -25,23 +25,33 @@ class Password extends OpenAccess
     }
 
     public function requestResetAction()
-    {
-        $isEmailSent = User::sendPasswordReset($_POST['email']);
-        
-        if($isEmailSent) 
-        {
-            View::$twig = null;
-            Flash::addMessage('Please check your email to reset the password', Flash::ORANGE);
+    {    
+        if (isset($_POST['email']))
+            {
+            $isEmailSent = User::sendPasswordReset($_POST['email']);
+            
+            if($isEmailSent) 
+            {
+                View::$twig = null;
+                Flash::addMessage('Please check your email to reset the password', Flash::ORANGE);
+                
+                View::renderTemplate('Login/login.html', [
+                    'email' => $_POST['email']
+                ]);
+            }
+            else
+            {
+                View::$twig = null;
+                Flash::addMessage('Password reset process failed', Flash::ORANGE);
+
+                View::renderTemplate('Login/login.html');
+            }
         }
         else
         {
-            View::$twig = null;
-            Flash::addMessage('Password reset process failed', Flash::ORANGE);
+            $this->redirect('/');
         }
 
-        View::renderTemplate('Login/login.html', [
-            'email' => $_POST['email']
-        ]);
 
     //    View::renderTemplate('Password/reset_requested.html');
     }

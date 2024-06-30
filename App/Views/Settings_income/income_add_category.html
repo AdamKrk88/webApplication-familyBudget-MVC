@@ -32,13 +32,14 @@
 	<main class="content-wrapper">
 		<div class="row initialHeightForContent align-items-center">
 			<article>		
-                <section>
-                    <div class="col-lg-5 col-md-7 col-sm-8 position-relative mx-auto">
+                <section class="position-relative">
+                    <div class="col-lg-5 col-md-7 col-sm-8 position-absolute start-50 bottom-0 translate-middle-x mx-auto">
                     {% if flash_messages is not empty %}
                         {% for message in flash_messages %}
-                        <p class="text-center {{ message.type }} position-absolute start-50 bottom-0 translate-middle-x w-100 m-0" id="text-message-paragraph">{{ message.body }}</p> 
+                        <p class="text-center {{ message.type }} w-100 m-0" id="text-message-paragraph">{{ message.body }}</p> 
                         {% endfor %}
                     {% endif %}
+                        <p class="text-center font-orange w-100 m-0" id="category-validation-jquery"></p>
                     </div>
                 </section>
 				<header>
@@ -54,7 +55,7 @@
                             <input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="new-category" id="new-category" title="Please fill out this field" aria-label="New category to be added for income" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
                             
                         <div class="d-grid mt-4">
-							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Add category button">Add</button>
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Add category button" disabled>Add</button>
 						</div>			
 					</form>
 				</div>	
@@ -68,5 +69,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="/js/settingsFunctionality.js"></script>
+    <script src="/js/categoryValidation.js"></script>
 
 {% endblock %}	

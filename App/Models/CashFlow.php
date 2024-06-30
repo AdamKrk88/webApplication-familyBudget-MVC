@@ -324,6 +324,7 @@ class CashFlow extends \Core\Model
         $expenseOrIncomeTable = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $expenseOrIncomeTableForGivenPeriod = [];
         $dateCheckFunctionName = '\App\Date::' . $dateCheckFunctionName;
+        $subsequentIdNumberForExpenseIncome = '1';
               
         if ($dateFromModalFrom=="0" && $dateFromModalTo=="0") 
         {
@@ -334,12 +335,16 @@ class CashFlow extends \Core\Model
                     if (call_user_func($dateCheckFunctionName, $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow])) 
                     {
                         $expenseOrIncomeTableForGivenPeriod[] = array(
-                                                            'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                         //   'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                            'id' => $subsequentIdNumberForExpenseIncome,
                                                             'date' => $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow],
                                                             'category' => $expenseOrIncomeTable[$i][$categoryArgumentNameForCashFlow],
                                                             'payment' => $expenseOrIncomeTable[$i]['payment_method_assigned_to_user_id'],
                                                             'comment' => $expenseOrIncomeTable[$i][$cashFlowComment],
-                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));             
+                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));   
+                                                            
+                        $subsequentIdNumberForExpenseIncome = (int)$subsequentIdNumberForExpenseIncome + 1;
+                        $subsequentIdNumberForExpenseIncome = strval($subsequentIdNumberForExpenseIncome);
                     }
     
                 }
@@ -352,11 +357,15 @@ class CashFlow extends \Core\Model
                     if (call_user_func($dateCheckFunctionName, $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow])) 
                     {
                         $expenseOrIncomeTableForGivenPeriod[] = array(
-                                                            'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                         //   'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                            'id' => $subsequentIdNumberForExpenseIncome,
                                                             'date' => $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow],
                                                             'category' => $expenseOrIncomeTable[$i][$categoryArgumentNameForCashFlow],
                                                             'comment' => $expenseOrIncomeTable[$i][$cashFlowComment],
-                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));             
+                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));    
+                                                            
+                        $subsequentIdNumberForExpenseIncome = (int)$subsequentIdNumberForExpenseIncome + 1;
+                        $subsequentIdNumberForExpenseIncome = strval($subsequentIdNumberForExpenseIncome);
                     }
     
                 }
@@ -372,12 +381,16 @@ class CashFlow extends \Core\Model
                     if (call_user_func($dateCheckFunctionName, $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow], $dateFromModalFrom, $dateFromModalTo)) 
                     {
                         $expenseOrIncomeTableForGivenPeriod[] = array(
-                                                            'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                          //  'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                            'id' => $subsequentIdNumberForExpenseIncome,
                                                             'date' => $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow],
                                                             'category' => $expenseOrIncomeTable[$i][$categoryArgumentNameForCashFlow],
                                                             'payment' => $expenseOrIncomeTable[$i]['payment_method_assigned_to_user_id'],
                                                             'comment' => $expenseOrIncomeTable[$i][$cashFlowComment],
-                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));             
+                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount'])); 
+                                                            
+                        $subsequentIdNumberForExpenseIncome = (int)$subsequentIdNumberForExpenseIncome + 1;
+                        $subsequentIdNumberForExpenseIncome = strval($subsequentIdNumberForExpenseIncome);
                     }
                 }
             }
@@ -389,11 +402,15 @@ class CashFlow extends \Core\Model
                     if (call_user_func($dateCheckFunctionName, $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow], $dateFromModalFrom, $dateFromModalTo)) 
                     {
                         $expenseOrIncomeTableForGivenPeriod[] = array(
-                                                            'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                      //      'id' => $expenseOrIncomeTable[$i]['id'], 
+                                                            'id' => $subsequentIdNumberForExpenseIncome,
                                                             'date' => $expenseOrIncomeTable[$i][$dateArgumentNameForCashFlow],
                                                             'category' => $expenseOrIncomeTable[$i][$categoryArgumentNameForCashFlow],
                                                             'comment' => $expenseOrIncomeTable[$i][$cashFlowComment],
-                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));             
+                                                            'amount' => static::formatNumberInBudget($expenseOrIncomeTable[$i]['amount']));  
+                                                            
+                        $subsequentIdNumberForExpenseIncome = (int)$subsequentIdNumberForExpenseIncome + 1;
+                        $subsequentIdNumberForExpenseIncome = strval($subsequentIdNumberForExpenseIncome);
                     }
                 }
             }

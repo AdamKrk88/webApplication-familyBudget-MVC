@@ -43,9 +43,9 @@ class Validation
         }
         elseif ($dataToBeValidated != '') 
         {
-            if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$dataToBeValidated) || strlen($dataToBeValidated) > 20) 
+            if (!preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/",$dataToBeValidated) || strlen($dataToBeValidated) > 20) 
             {
-                $errors[] = "Only letters and one space allowed in name. Maximum number of characters is 20";
+                $errors[] = "Only letters and one space allowed. Maximum number of characters is 20";
             }
         }
 
@@ -95,7 +95,7 @@ class Validation
     {
         $errors = [];
 
-        $isCommentValid = preg_match("/^[a-z0-9\040\.\-\/]*$/i", $dataToBeValidated);    // \x5C backslash
+        $isCommentValid = preg_match("/^[a-ząćęłńóśźż0-9\040\.\-\/]*$/i", $dataToBeValidated);    // \x5C backslash
         $isCommentString = is_string($dataToBeValidated);
 
         if ($isCommentValid === 0)

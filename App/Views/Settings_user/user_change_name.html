@@ -32,13 +32,14 @@
 	<main class="content-wrapper">
 		<div class="row initialHeightForContent align-items-center">
 			<article>		
-                <section>
-                    <div class="col-lg-5 col-md-6 col-sm-7 position-relative mx-auto">
+                <section class="position-relative">
+                    <div class="col-lg-5 col-md-6 col-sm-7 position-absolute start-50 bottom-0 translate-middle-x mx-auto">
                     {% if flash_messages is not empty %}
                         {% for message in flash_messages %}
-                        <p class="text-center {{ message.type }} position-absolute start-50 bottom-0 translate-middle-x w-100 m-0" id="text-message-paragraph">{{ message.body }}</p> 
+                        <p class="text-center {{ message.type }} w-100 m-0" id="text-message-paragraph">{{ message.body }}</p> 
                         {% endfor %}
                     {% endif %}
+                        <p class="text-center font-orange w-100 m-0" id="name-validation-jquery"></p> 
                     </div>
                 </section>
 				<header>
@@ -50,11 +51,11 @@
 					<div class="underline"></div>   
 					<form class="lh-1" action="/settings/changeUsername" method="post">
                         
-                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="new-username">New username</label>
-                            <input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="new-username" id="new-username" title="Please fill out this field" aria-label="Username change - new nick for user" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
+                            <label class="form-label font-color-grey font-size-scaled-from-15px fw-bolder mb-1" for="username">New username</label>
+                            <input class="form-control form-control-sm fw-bold font-color-grey" type="text" name="new-username" id="username" title="Please fill out this field" aria-label="Username change - new nick for user" required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')" />
                             
                         <div class="d-grid mt-4">
-							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Change username button">Change</button>
+							<button class="btn button-grey-color fw-bold font-size-scaled-from-15px" type="submit" id="data-change-button" aria-label="Change username button" disabled>Change</button>
 						</div>			
 					</form>
 				</div>	
@@ -68,5 +69,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="/js/settingsFunctionality.js"></script>
+    <script src="/js/nameValidation.js"></script>
 
 {% endblock %}	

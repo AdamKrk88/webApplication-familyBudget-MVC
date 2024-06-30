@@ -24,6 +24,17 @@ class Login extends OpenAccess
     {
         View::renderTemplate('Login/login.html'); 
 
+   //     View::renderTemplate('Test/test.html', [
+   //         'myArray' => []
+   //     ]); 
+
+ //    if (preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/","Adam Stępniewski")) {
+ //      echo "Works";
+ //       }
+  //  "/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*$/"
+   /*  if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$this->username)) {
+        $this->errors[] = "Only letters and one space allowed in name. Please use standard English characters";
+    }  */
    //  $prev_date = date('Y-m-d', strtotime('2024-05-04' .' -1 day'));
    //  var_dump(empty(['0']));
    //     var_dump(preg_match("/^\d+\.\d\d$/","34.345")); 

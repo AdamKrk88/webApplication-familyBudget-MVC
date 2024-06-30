@@ -37,18 +37,18 @@ class Ajax extends \Core\Controller
      * 
      * @return string error message or empty string
      */ 
-    public static function checkComment($comment) 
-    {
+/*    public static function checkComment($comment) 
+    {  
         $error = "";
         if ($comment != '' || strlen($comment) != 0) {
-          if (!preg_match("/^[a-z0-9\040\.\-\/]+$/i",$comment)) {    // \x5C backslash
+          if (!preg_match("/^[a-ząćęłńóśźż0-9\040\.\-\/]+$/i",$comment)) {    // \x5C backslash
             $error = "Only letters, numbers, space, forward slash, period and dash allowed in the comment";
             return $error;
           }
         }
-        return $error;       
+        return $error;
       }
-
+*/
     /**
      * Take data from first income / expense form as result of ajax request
      * 
@@ -76,9 +76,10 @@ class Ajax extends \Core\Controller
         $_SESSION['category'] = Validation::testInput($_POST['category']);
         $_SESSION['comment'] = Validation::testInput($_POST['comment']);
 
-        $error = static::checkComment($_SESSION['comment']);
+      //  $error = static::checkComment($_SESSION['comment']);
+        $errors = Validation::validateComment($_SESSION['comment']);
 
-        if (!$error)
+        if (empty($errors))
         {
             if (isset($_SESSION['payment'])) 
             {
@@ -91,13 +92,8 @@ class Ajax extends \Core\Controller
 
             if (!$isAdded) 
             {
-                $error = 'Something went wrong with database';
-                echo json_encode($error);
+                $errors[] = 'Something went wrong with database';
             }
-        }
-        else
-        {
-            echo json_encode($error);
         }
 
         unset($_SESSION['amount']);
@@ -110,6 +106,8 @@ class Ajax extends \Core\Controller
         {
             unset($_SESSION['payment']);
         }
+
+        echo json_encode($errors);
 
     }
 

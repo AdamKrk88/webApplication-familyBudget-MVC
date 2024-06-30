@@ -159,9 +159,9 @@ class User extends \Core\Model
         }
         elseif ($this->username != '') 
         {
-            if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$this->username)) 
+            if (!preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/",$this->username)) 
             {
-                $this->errors[] = "Only letters and one space allowed in name. Please use standard English characters";
+                $this->errors[] = "Only letters and one space allowed in name";
             }
         }
     }
@@ -199,8 +199,8 @@ class User extends \Core\Model
         }
         elseif ($this->new_password !='') 
         {
-            $uppercase = preg_match('@[A-Z]@', $this->new_password);
-            $lowercase = preg_match('@[a-z]@', $this->new_password);
+            $uppercase = preg_match('@[A-ZĄĆĘŁŃÓŚŹŻ]@', $this->new_password);
+            $lowercase = preg_match('@[a-ząćęłńóśźż]@', $this->new_password);
             $number    = preg_match('@[0-9]@', $this->new_password);
             $specialChars = preg_match('@[^\w]@', $this->new_password);
             
@@ -283,47 +283,57 @@ class User extends \Core\Model
      * @return void
      */
     public function validate() {
+        //
+        $this->incorrectInput = [];
+
         //Output escaping
         $this->username = Validation::testInput($this->username);
         $this->email = Validation::testInput($this->email);
-        $this->password = trim($this->password);
+        $this->password = Validation::testInput($this->password);
         
         //Name
         if ($this->username == '') {
             $this->errors[] = 'Name is required';
+            $this->incorrectInput['name'] = "name";
         }
         elseif ($this->username != '') {
-            if (!preg_match("/^([a-zA-Z]+)* ?[a-zA-Z]+$/",$this->username)) {
-                $this->errors[] = "Only letters and one space allowed in name. Please use standard English characters";
+            if (!preg_match("/^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+)* ?[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/",$this->username)) {
+                $this->errors[] = "Only letters and one space allowed in name";
+                $this->incorrectInput['name'] = "name";
             }
         }
         
         //Email
         if ($this->email == '') {
             $this->errors[] = 'Email is required';
+            $this->incorrectInput['email'] = "email";
         }
         elseif ($this->email != '') {
             $this->email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
             if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
                 $this->errors[] = "Invalid email format";
+                $this->incorrectInput['email'] = "email";
             }
             elseif (static::emailExistsIgnoreIfNeeded($this->email, $this->id ?? null)) {
                 $this->errors[] = "Error. Provided email exists";
+                $this->incorrectInput['email'] = "email";
             }
         }
 
         //Password
         if ($this->password == '') {
             $this->errors[] = 'Password is required';
+            $this->incorrectInput['password'] = "password";
         }
         elseif ($this->password !='') {
-            $uppercase = preg_match('@[A-Z]@', $this->password);
-            $lowercase = preg_match('@[a-z]@', $this->password);
+            $uppercase = preg_match('@[A-ZĄĆĘŁŃÓŚŹŻ]@', $this->password);
+            $lowercase = preg_match('@[a-ząćęłńóśźż]@', $this->password);
             $number    = preg_match('@[0-9]@', $this->password);
             $specialChars = preg_match('@[^\w]@', $this->password);
             
             if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($this->password) < 10 ) {
                 $this->errors[] = 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character. Length at least 10 characters';
+                $this->incorrectInput['password'] = "password";
             }
         }
     }

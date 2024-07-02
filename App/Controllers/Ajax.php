@@ -63,6 +63,8 @@ class Ajax extends \Core\Controller
         if (isset($_POST['payment']))
         {
             $_SESSION['payment'] = Validation::testInput($_POST['payment']);
+            $_SESSION['payment'] = preg_replace('/\\\\u([\da-fA-F]{4})/', '&#x\1;', $_SESSION['payment']);
+            $_SESSION['payment'] = html_entity_decode($_SESSION['payment']);
         }
     }
 

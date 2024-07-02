@@ -13,7 +13,7 @@ use \App\Models\CashFlow;
  *
  * PHP version 7.2.0
  */
-class Settings extends \Core\Controller
+class Settings extends Authenticated
 {
 
     private function addExpenseCategoryToDatabaseDirectly($categoryProvidedByUser)
@@ -1320,6 +1320,8 @@ class Settings extends \Core\Controller
         {
             $category = $_POST['category'];
             $category = Validation::testInput($category);
+            $category = preg_replace('/\\\\u([\da-fA-F]{4})/', '&#x\1;', $category);
+            $category = html_entity_decode($category);
             $errors = Validation::validateCategoryOrPayment($category, "Category");
 
             if(empty($errors))
@@ -1355,6 +1357,8 @@ class Settings extends \Core\Controller
         {
             $category = $_POST['category'];
             $category = Validation::testInput($category);
+            $category = preg_replace('/\\\\u([\da-fA-F]{4})/', '&#x\1;', $category);
+            $category = html_entity_decode($category);
             $errors = Validation::validateCategoryOrPayment($category, "Category");
 
             if(empty($errors))
@@ -1391,6 +1395,8 @@ class Settings extends \Core\Controller
 
             $payment = $_POST['payment'];
             $payment = Validation::testInput($payment);
+            $payment = preg_replace('/\\\\u([\da-fA-F]{4})/', '&#x\1;', $payment);
+            $payment = html_entity_decode($payment);
             $errors = Validation::validateCategoryOrPayment($payment, "Payment");
 
             if(empty($errors))

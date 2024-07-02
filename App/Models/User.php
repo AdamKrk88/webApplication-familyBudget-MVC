@@ -543,8 +543,8 @@ class User extends \Core\Model
     {
         $url = 'http://' . $_SERVER['HTTP_HOST'] . '/settings/email-activate/' . $this->activation_token;
 
-        $text = View::getTemplate('Settings/email_change_email.txt', ['url' => $url]);
-        $html = View::getTemplate('Settings/email_change_email.html', ['url' => $url]);
+        $text = View::getTemplate('Settings_user/email_change_email.txt', ['url' => $url]);
+        $html = View::getTemplate('Settings_user/email_change_email.html', ['url' => $url]);
 
         Mail::send($this->email_change, 'Email change - please confirm', $text, $html);
     }

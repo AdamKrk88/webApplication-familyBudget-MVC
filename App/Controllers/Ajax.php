@@ -76,6 +76,9 @@ class Ajax extends \Core\Controller
         $_SESSION['category'] = Validation::testInput($_POST['category']);
         $_SESSION['comment'] = Validation::testInput($_POST['comment']);
 
+        $_SESSION['category'] = preg_replace('/\\\\u([\da-fA-F]{4})/', '&#x\1;', $_SESSION['category']);
+        $_SESSION['category'] = html_entity_decode($_SESSION['category']);
+
       //  $error = static::checkComment($_SESSION['comment']);
         $errors = Validation::validateComment($_SESSION['comment']);
 

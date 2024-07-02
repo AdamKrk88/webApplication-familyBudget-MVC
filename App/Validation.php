@@ -10,6 +10,22 @@ namespace App;
 
 class Validation 
 {
+
+    /**
+     * Capitalize first letter including polish characters
+     * @param string $string string from which to extract the substring
+     * @param string $encoding the character encoding of the string 
+     * 
+     * @return string string with first letter capitalized
+     */
+    private static function mb_ucfirst($string, $encoding)
+    {
+        $firstChar = mb_substr($string, 0, 1, $encoding);
+        $then = mb_substr($string, 1, null, $encoding);
+        return mb_strtoupper($firstChar, $encoding) . $then;
+    }
+
+
     /** 
      * Output escaping
      * @param string $data input provided by user
@@ -25,7 +41,7 @@ class Validation
 
     public static function capitalizeFirstLetter($string)
     {
-        return ucfirst(strtolower($string));
+        return static::mb_ucfirst(mb_strtolower($string), 'UTF-8');
     }
 
     public static function validateCategoryOrPayment($dataToBeValidated, $dataType) 

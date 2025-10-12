@@ -41,15 +41,15 @@ class Mail
 
             $mail->SMTPDebug = SMTP::DEBUG_OFF;                                       
             $mail->isSMTP();                                            
-            $mail->Host       = Config::PHPMAILER_HOST;                    
+            $mail->Host       = Config::getPhpmailerHost();                    
             $mail->SMTPAuth   = true;                             
-            $mail->Username   = Config::PHPMAILER_USERNAME;                 
-            $mail->Password   = Config::PHPMAILER_PASSWORD;                        
+            $mail->Username   = Config::getPhpmailerUsername();                 
+            $mail->Password   = Config::getPhpmailerPassword();                        
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;                              
             $mail->Port       = 587;  
          
             //Recipient
-            $mail->setFrom(Config::PHPMAILER_USERNAME, Config::PHPMAILER_SENDER_NAME);           
+            $mail->setFrom(Config::getPhpmailerUsername(), Config::getPhpmailerSenderName());           
             $mail->addAddress($to);
          //   $mail->addAddress('receiver2@gfg.com', 'Name');
             

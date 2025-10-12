@@ -6,6 +6,7 @@
  * PHP version 7.0
  */
 
+
 /**
  * Composer
  */
@@ -18,6 +19,19 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 error_reporting(E_ALL);
 set_error_handler('Core\Error::errorHandler');
 set_exception_handler('Core\Error::exceptionHandler');
+
+
+/**
+ * Load configuration file
+ */
+
+$configClass = class_exists(App\Config::class)
+    ? App\Config::class
+    : App\ConfigSample::class;
+
+$config = new $configClass();
+
+// $config = new \App\Config();
 
 
 /**
